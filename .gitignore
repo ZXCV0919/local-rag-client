@@ -1,0 +1,12 @@
+node_modules/
+dist/
+target/
+.Derve
+src-tauri/target/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+.env
+.env.local
+.superpowers/
