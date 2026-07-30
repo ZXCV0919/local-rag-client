@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本地知识库 - 引用溯源</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+:root { --bg-primary: #ffffff; --accent: #6366f1; --accent-light: #eef2ff; --text-primary: #1a1b2e; --text-secondary: #6b7280; --border: #e5e7eb; }
+.container { width: 100%; max-width: 800px; }
+h2 { font-size: 18px; margin-bottom: 20px; color: var(--text-primary); }
+h3 { font-size: 14px; margin-bottom: 16px; color: var(--text-secondary); font-weight: 400; }
+.card { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
+.message { padding: 16px; line-height: 1.8; font-size: 14px; color: var(--text-primary); }
+.citation-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-light); color: var(--accent); padding: 2px 10px; border-radius: 14px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin: 0 2px; border: 1px solid transparent; }
+.citation-tag:hover { background: var(--accent); color: #fff; }
+.citation-popup { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12); padding: 20px; margin-top: 12px; }
+.popup-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.popup-header h4 { font-size: 14px; color: var(--text-primary); }
+.popup-header .path { font-size: 12px; color: var(--accent); margin-top: 2px; }
+.popup-close { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-secondary); padding: 4px; }
+.popup-content { background: #f8f9fa; padding: 14px; border-radius: 8px; font-size: 13px; line-height: 1.7; color: var(--text-secondary); border-left: 3px solid var(--accent); }
+.popup-content .highlight { background: #fef08a; padding: 1px 4px; border-radius: 2px; }
+.popup-context { font-size: 12px; color: var(--text-secondary); margin-top: 6px; font-style: italic; }
+.popup-actions { margin-top: 14px; display: flex; gap: 8px; }
+.popup-actions button { font-size: 12px; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+.popup-actions .primary { background: var(--accent); color: #fff; border: none; }
+.popup-actions .primary:hover { background: #4f46e5; }
+.popup-actions .secondary { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+.popup-actions .secondary:hover { border-color: var(--accent); color: var(--accent); }
+.arrow-label { font-size: 11px; color: var(--accent); margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+.arrow-label::before { content: "↓"; font-size: 16px; }
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>💬 引用溯源交互</h2>
+
+  <div class="card">
+    <div class="message">
+      RAG（检索增强生成）架构与传统检索的核心区别在于<strong>是否利用大语言模型对检索结果进行理解和生成</strong>。<br><br>
+      传统检索返回文档列表，用户自己阅读筛选。而RAG先检索相关文档片段，再让LLM生成自然语言答案。<br><br>
+      具体对比：<br>
+      • <strong>准确性</strong>：RAG能理解上下文，给出更精准的答案；传统检索只能按关键词匹配 <span class="citation-tag">📄 技术方案.pdf #3</span><br>
+      • <strong>可解释性</strong>：传统检索更透明；RAG答案是生成的，需要额外溯源 <span class="citation-tag" style="background:#e0e7ff;">📄 技术方案.pdf #7</span><br>
+      • <strong>场景适配</strong>：精确术语查找→传统检索更快；概念性提问→RAG更适合 <span class="citation-tag">📗 学习笔记.md #12</span>
+    </div>
+  </div>
+
+  <div class="arrow-label">点击引用标签后展开</div>
+
+  <div class="card" style="border-color: var(--accent); border-width: 2px;">
+    <div class="citation-popup" style="box-shadow: none; padding: 0; margin: 0;">
+      <div class="popup-header">
+        <div>
+          <h4>📄 技术方案.pdf</h4>
+          <div class="path">第2章 > RAG架构 > 检索增强生成</div>
+        </div>
+        <button class="popup-close">✕</button>
+      </div>
+      <div class="popup-content">
+        ...RAG架构是一种结合<span class="highlight">检索和生成</span>的方法。与传统检索不同，它先通过向量化找到相关文档片段，再由大语言模型基于这些片段生成准确的回答。这种方法在<span class="highlight">准确性上比纯关键词搜索提升了32%</span>，同时减少了模型幻觉...
+      </div>
+      <div class="popup-context">↑ 前文: "在信息检索领域，传统方法..." &nbsp;&nbsp; 后文: "此外，RAG架构的另一个优势是..."</div>
+      <div class="popup-actions">
+        <button class="primary">📄 查看原文</button>
+        <button class="secondary">📋 复制内容</button>
+        <button class="secondary">🔗 定位到文档</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>引用卡片的交互流程：</h3>
+  <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+    <p>1. <strong>点击</strong>答案中的 <span class="citation-tag" style="cursor:default;">📄 文件名#序号</span> 标签</p>
+    <p>2. 弹出<strong>引用卡片</strong>，显示：文档名 + 标题路径 + 分块原文</p>
+    <p>3. 匹配部分<strong>高亮显示</strong>（黄色背景）</p>
+    <p>4. 卡片显示前后各扩展<span style="color:var(--accent);">50字上下文</span>（灰色斜体）</p>
+    <p>5. 三个操作按钮：查看原文 / 复制内容 / 定位到文档</p>
+  </div>
+</div>
+</body>
+</html>

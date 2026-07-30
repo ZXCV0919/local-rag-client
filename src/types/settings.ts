@@ -3,6 +3,9 @@ import { FALLBACK_CHUNKING_STRATEGY } from './knowledge-base';
 
 export type RetrievalMode = 'hybrid' | 'semantic' | 'keyword';
 
+/** 重排：默认加权 RRF；可选 LLM listwise（更慢，失败回退 RRF） */
+export type RerankMode = 'rrf' | 'llm';
+
 /** 界面明暗：与系统设置一致，或强制浅色 / 深色 */
 export type ColorSchemePreference = 'system' | 'light' | 'dark';
 
@@ -13,6 +16,8 @@ export interface AppSettings {
   default_embedding_model: string;
   default_chat_model: string;
   retrieval_mode: RetrievalMode;
+  /** 第二阶段重排策略 */
+  rerank_mode: RerankMode;
   vector_weight: number;
   keyword_weight: number;
   max_results: number;
@@ -25,7 +30,7 @@ export interface AppSettings {
   answer_self_check: boolean;
   /** 新建知识库时使用的默认分块策略（仅存 settings 表 JSON） */
   default_chunking_strategy: ChunkingStrategy;
-  /** 对话生成提供商：本地 Ollama 或硅基流动云端 */
+  /** 对话生成提供方：本地 Ollama 或硅基流动云端 */
   chat_provider: ChatProvider;
   /** 硅基流动 API Key（UI 脱敏展示） */
   siliconflow_api_key: string;
@@ -40,6 +45,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   default_embedding_model: 'nomic-embed-text',
   default_chat_model: 'qwen2.5:7b',
   retrieval_mode: 'hybrid',
+  rerank_mode: 'rrf',
   vector_weight: 0.7,
   keyword_weight: 0.3,
   max_results: 6,

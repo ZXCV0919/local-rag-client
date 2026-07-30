@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: var(--font-sans);
+}
+
+body {
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+}
+
+#root {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--color-border) 35%, transparent);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-border-dark) 85%, var(--color-text-secondary));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-border-dark) 70%, var(--color-text-secondary));
+}
+
+.chat-markdown pre code.hljs {
+  background: transparent;
+}
+
+.chat-markdown .hljs {
+  color: var(--color-code-block-fg);
+}
+
+@keyframes message-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-enter {
+  animation: message-fade-in 0.22s ease-out both;
+}
+
+@keyframes chunk-highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.chunk-highlight-mark {
+  animation: chunk-highlight-pulse 0.75s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .message-enter {
+    animation: none;
+  }
+}
+
+.chat-markdown .hljs-keyword,
+.chat-markdown .hljs-selector-tag {
+  color: #c792ea;
+}
+
+.chat-markdown .hljs-string,
+.chat-markdown .hljs-attr {
+  color: #c3e88d;
+}
+
+.chat-markdown .hljs-comment {
+  color: #676e95;
+}
+
+.chat-markdown .hljs-number,
+.chat-markdown .hljs-literal {
+  color: #f78c6c;
+}
+
+.chat-markdown .hljs-function {
+  color: #82aaff;
+}
+
+/* react-resizable-panels separators (VS-style drag handles) */
+[data-separator]:hover .splitter-inner,
+[data-separator]:focus-visible .splitter-inner {
+  background-color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Undecorated Tauri frame: Chromium/WebView2 drag shim paired with data-tauri-* hooks */
+[data-tauri-drag-region] {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+
+[data-tauri-no-drag] {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}

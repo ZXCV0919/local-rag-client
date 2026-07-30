@@ -18,7 +18,7 @@ local-knowledge-base/
 │   ├── Cargo.toml
 │   ├── tauri.conf.json
 │   ├── build.rs
-│   ├── src/
+│   ├── src/an
 │   │   ├── main.rs
 │   │   ├── lib.rs
 │   │   ├── db/

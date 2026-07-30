@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "mode_note": "offline-fixture: bag-of-words cosine as mock vector + term-overlap keyword; real rerank + relevance-gate",
+  "cases": [
+    {
+      "id": "ollama-port",
+      "query": "Ollama 默认端口是多少",
+      "must_contain": ["11434"],
+      "expect_decline": false
+    },
+    {
+      "id": "ollama-embed-model",
+      "query": "默认嵌入模型叫什么",
+      "must_contain": ["nomic-embed-text"],
+      "expect_decline": false
+    },
+    {
+      "id": "ollama-chat-model",
+      "query": "本地对话默认用哪个模型",
+      "must_contain": ["qwen2.5:7b"],
+      "expect_decline": false
+    },
+    {
+      "id": "hybrid-why",
+      "query": "为什么要用混合检索",
+      "must_contain": ["hybrid"],
+      "expect_decline": false
+    },
+    {
+      "id": "hybrid-rrf",
+      "query": "向量和关键词怎么融合",
+      "must_contain": ["RRF"],
+      "expect_decline": false
+    },
+    {
+      "id": "hybrid-weights",
+      "query": "默认向量权重是多少",
+      "must_contain": ["0.7"],
+      "expect_decline": false
+    },
+    {
+      "id": "hybrid-diversity",
+      "query": "重排如何避免一篇文档霸榜",
+      "must_contain": ["上限"],
+      "expect_decline": false
+    },
+    {
+      "id": "sf-boundary",
+      "query": "SiliconFlow 模式下哪些步骤仍在本地",
+      "must_contain": ["嵌入"],
+      "expect_decline": false
+    },
+    {
+      "id": "sf-key",
+      "query": "SiliconFlow 需要配置什么密钥",
+      "must_contain": ["API Key"],
+      "expect_decline": false
+    },
+    {
+      "id": "sf-use-case",
+      "query": "什么时候用本地嵌入加云端生成",
+      "must_contain": ["出境"],
+      "expect_decline": false
+    },
+    {
+      "id": "chunk-max",
+      "query": "max_chunk_size 默认数值是多少",
+      "must_contain": ["800"],
+      "expect_decline": false
+    },
+    {
+      "id": "chunk-overlap",
+      "query": "默认 overlap 参数是多少",
+      "must_contain": ["50"],
+      "expect_decline": false
+    },
+    {
+      "id": "chunk-heading",
+      "query": "heading_as_context 有什么用",
+      "must_contain": ["标题"],
+      "expect_decline": false
+    },
+    {
+      "id": "chroma-role",
+      "query": "ChromaDB 负责做什么",
+      "must_contain": ["向量"],
+      "expect_decline": false
+    },
+    {
+      "id": "chroma-clear",
+      "query": "清空全部数据时 Chroma 会怎样",
+      "must_contain": ["清理"],
+      "expect_decline": false
+    },
+    {
+      "id": "decline-weather",
+      "query": "What is the weather in London today and should I bring an umbrella?",
+      "must_contain": null,
+      "expect_decline": true
+    },
+    {
+      "id": "decline-cooking",
+      "query": "How many grams of sugar do I need for a classic beef stew recipe?",
+      "must_contain": null,
+      "expect_decline": true
+    },
+    {
+      "id": "decline-stock",
+      "query": "How do I properly rosina violin bow for a beginner recital?",
+      "must_contain": null,
+      "expect_decline": true
+    }
+  ]
+}

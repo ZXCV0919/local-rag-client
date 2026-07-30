@@ -8,6 +8,8 @@
 
 **Tech Stack:** Radix UI (Dialog, Tabs, Select, Switch), Tauri events
 
+**与阶段 6.5 的衔接：** 若已实现或后续将按计划完成 `docs/superpowers/plans/2026-04-29-phase6.5-visual-youth-polish.md`，本阶段新增的设置与各子组件在编写样式时宜优先使用 `src/styles/variables.css` 与 `global.css` 中的语义 token（`var(--*)`）、既定的圆角/阴影与 `focus-visible` 约定，并与既有外观区块（如 `AppearanceSection`）保持同一套视觉语言，尽量减少硬编码色值与零碎间距。
+
 ---
 
 ## File Structure

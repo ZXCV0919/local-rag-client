@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { ChunkingStrategy } from '../../types/knowledge-base';
 import { tauriCommand } from '../../hooks/useDatabase';
 import { useSettingsStore } from '../../store/settings';
-import { DEFAULT_SETTINGS, type ChatProvider, type RetrievalMode } from '../../types/settings';
+import { DEFAULT_SETTINGS, type ChatProvider, type RetrievalMode, type RerankMode } from '../../types/settings';
 import {
   applyColorSchemePreference,
   parseColorSchemeStored,
@@ -50,6 +50,12 @@ function parseRetrievalMode(raw: string | undefined): RetrievalMode {
   const s = parseJsonOrPlainString(raw, DEFAULT_SETTINGS.retrieval_mode).toLowerCase();
   if (s === 'hybrid' || s === 'semantic' || s === 'keyword') return s;
   return DEFAULT_SETTINGS.retrieval_mode;
+}
+
+function parseRerankMode(raw: string | undefined): RerankMode {
+  const s = parseJsonOrPlainString(raw, DEFAULT_SETTINGS.rerank_mode).toLowerCase();
+  if (s === 'rrf' || s === 'llm') return s;
+  return DEFAULT_SETTINGS.rerank_mode;
 }
 
 function parseChatProvider(raw: string | undefined): ChatProvider {
@@ -132,6 +138,7 @@ export function ThemeBootstrap() {
           ),
           default_chat_model: parseJsonOrPlainString(all.default_chat_model, DEFAULT_SETTINGS.default_chat_model),
           retrieval_mode: parseRetrievalMode(all.retrieval_mode),
+          rerank_mode: parseRerankMode(all.rerank_mode),
           vector_weight: clamp(parseNumberStored(all.vector_weight, DEFAULT_SETTINGS.vector_weight), 0, 1),
           keyword_weight: clamp(parseNumberStored(all.keyword_weight, DEFAULT_SETTINGS.keyword_weight), 0, 1),
           max_results: clamp(parseIntStored(all.max_results, DEFAULT_SETTINGS.max_results), 1, 50),

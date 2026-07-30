@@ -1,6 +1,6 @@
 # 阶段2：数据层 — 实现计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** 完成所有 Rust 端数据模型 CRUD 操作、ChromaDB 集成、Ollama 连接检测，以及对应的前端管理界面。
 
@@ -63,7 +63,7 @@ src/
 - Create: `src-tauri/src/db/settings.rs`
 - Update: `src-tauri/src/db/mod.rs`
 
-- [ ] **Step 1: 扩展 Diesel 模型定义**
+- [x] **Step 1: 扩展 Diesel 模型定义**
 
 更新 `src-tauri/src/db/models.rs`，添加 Document, Chunk, Conversation, Message, Settings 模型。每个模型包含 `Queryable` (读取) 和 `Insertable` (写入) 两个派生结构体，所有字段使用 `String`/`i32` 类型（SQLite 不支持原生 datetime，TEXT 存 ISO 字符串）。
 
@@ -73,7 +73,7 @@ src/
 - `Message` 的 `referenced_chunks` 是 JSON 数组字符串
 - `Settings` 是 KV 存储，`value` 是 JSON 字符串
 
-- [ ] **Step 2: 实现文档 CRUD (`document.rs`)**
+- [x] **Step 2: 实现文档 CRUD (`document.rs`)**
 
 ```rust
 pub fn create(kb_id: &str, title: &str, file_name: &str, file_path: &str, file_type: &str, file_size: i32, content_hash: &str) -> Result<Document, AppError>
@@ -85,7 +85,7 @@ pub fn delete(id: &str) -> Result<(), AppError>
 pub fn find_by_hash(kb_id: &str, content_hash: &str) -> Result<Option<Document>, AppError>
 ```
 
-- [ ] **Step 3: 实现分块 CRUD (`chunk.rs`)**
+- [x] **Step 3: 实现分块 CRUD (`chunk.rs`)**
 
 ```rust
 pub fn create_bulk(chunks: Vec<NewChunk>) -> Result<Vec<Chunk>, AppError>  // 批量插入
@@ -98,7 +98,7 @@ pub fn delete_by_knowledge_base(kb_id: &str) -> Result<(), AppError>
 pub fn search_fulltext(kb_id: &str, query: &str, limit: i32) -> Result<Vec<Chunk>, AppError>   // FTS5 搜索
 ```
 
-- [ ] **Step 4: 实现对话和消息 CRUD (`conversation.rs`)**
+- [x] **Step 4: 实现对话和消息 CRUD (`conversation.rs`)**
 
 ```rust
 // 对话
@@ -114,7 +114,7 @@ pub fn list_by_conversation(conv_id: &str) -> Result<Vec<Message>, AppError>
 pub fn get_recent_messages(conv_id: &str, limit: i32) -> Result<Vec<Message>, AppError>   // 滑动窗口
 ```
 
-- [ ] **Step 5: 实现设置 CRUD (`settings.rs`)**
+- [x] **Step 5: 实现设置 CRUD (`settings.rs`)**
 
 ```rust
 pub fn get(key: &str) -> Result<Option<String>, AppError>
@@ -123,7 +123,7 @@ pub fn get_all() -> Result<HashMap<String, String>, AppError>
 pub fn delete(key: &str) -> Result<(), AppError>
 ```
 
-- [ ] **Step 6: 更新 db/mod.rs 注册新模块**
+- [x] **Step 6: 更新 db/mod.rs 注册新模块**
 
 ```rust
 pub mod migrations;
@@ -136,13 +136,13 @@ pub mod conversation;
 pub mod settings;
 ```
 
-- [ ] **Step 7: 验证编译**
+- [x] **Step 7: 验证编译**
 
 ```bash
 cd src-tauri && cargo check
 ```
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```bash
 git add .
@@ -160,7 +160,7 @@ git commit -m "feat: add all data model CRUD operations for documents, chunks, c
 - Update: `src-tauri/src/commands/mod.rs`
 - Update: `src-tauri/src/lib.rs`
 
-- [ ] **Step 1: 实现 Ollama 状态检测和服务管理**
+- [x] **Step 1: 实现 Ollama 状态检测和服务管理**
 
 `src-tauri/src/services/ollama.rs`:
 
@@ -268,7 +268,7 @@ impl OllamaService {
 }
 ```
 
-- [ ] **Step 2: 创建 Ollama Tauri Commands**
+- [x] **Step 2: 创建 Ollama Tauri Commands**
 
 `src-tauri/src/commands/ollama.rs`:
 
@@ -333,7 +333,7 @@ pub async fn get_ollama_model_info(state: State<'_, OllamaState>, name: String) 
 }
 ```
 
-- [ ] **Step 3: 注册 Ollama 状态到 Tauri**
+- [x] **Step 3: 注册 Ollama 状态到 Tauri**
 
 更新 `src-tauri/src/lib.rs`：
 
@@ -350,13 +350,13 @@ commands::ollama::list_ollama_models,
 commands::ollama::get_ollama_model_info,
 ```
 
-- [ ] **Step 4: 验证编译**
+- [x] **Step 4: 验证编译**
 
 ```bash
 cd src-tauri && cargo check
 ```
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add .
@@ -374,7 +374,7 @@ git commit -m "feat: add Ollama service layer with status check and model listin
 - Update: `src-tauri/src/commands/mod.rs`
 - Update: `src-tauri/src/lib.rs`
 
-- [ ] **Step 1: 实现文档 Commands**
+- [x] **Step 1: 实现文档 Commands**
 
 `src-tauri/src/commands/document.rs` 包含：
 - `import_document(kb_id, file_path, file_name, file_type, file_size, content_hash)` → 创建文档记录，status=pending
@@ -385,7 +385,7 @@ git commit -m "feat: add Ollama service layer with status check and model listin
 
 每个 Command 调用 `db::document` 和 `db::chunk` 中对应的 CRUD 函数。删除文档时同步调用 `chromadb.delete_documents`（如果 ChromaDB 可用）。
 
-- [ ] **Step 2: 实现对话 Commands**
+- [x] **Step 2: 实现对话 Commands**
 
 `src-tauri/src/commands/chat.rs` 包含：
 - `create_conversation(kb_id, title, llm_model)` → 创建新对话
@@ -395,14 +395,14 @@ git commit -m "feat: add Ollama service layer with status check and model listin
 - `list_messages(conversation_id)` → 获取对话的全部消息
 - `delete_conversation(id)` → 删除对话
 
-- [ ] **Step 3: 实现设置 Commands**
+- [x] **Step 3: 实现设置 Commands**
 
 `src-tauri/src/commands/settings.rs` 包含：
 - `get_setting(key)` → 获取单项设置
 - `get_all_settings()` → 获取所有设置
 - `set_setting(key, value)` → 更新设置
 
-- [ ] **Step 4: 更新 commands/mod.rs 和 lib.rs 注册所有命令**
+- [x] **Step 4: 更新 commands/mod.rs 和 lib.rs 注册所有命令**
 
 ```rust
 // commands/mod.rs
@@ -415,13 +415,13 @@ pub mod settings;
 // lib.rs invoke_handler 中添加所有新命令
 ```
 
-- [ ] **Step 5: 验证编译**
+- [x] **Step 5: 验证编译**
 
 ```bash
 cd src-tauri && cargo check
 ```
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add .
@@ -438,7 +438,7 @@ git commit -m "feat: add Tauri commands for documents, conversations, and settin
 - Create: `src/hooks/useDocument.ts`
 - Create: `src/hooks/useOllama.ts`
 
-- [ ] **Step 1: 创建文档 Store**
+- [x] **Step 1: 创建文档 Store**
 
 `src/store/document.ts`:
 
@@ -498,7 +498,7 @@ export const useDocumentStore = create<DocumentState>((set) => ({
 }));
 ```
 
-- [ ] **Step 2: 创建对话 Store**
+- [x] **Step 2: 创建对话 Store**
 
 `src/store/chat.ts`:
 
@@ -557,7 +557,7 @@ export const useChatStore = create<ChatState>((set) => ({
 }));
 ```
 
-- [ ] **Step 3: 创建文档和 Ollama Hooks**
+- [x] **Step 3: 创建文档和 Ollama Hooks**
 
 `src/hooks/useDocument.ts`:
 
@@ -642,7 +642,7 @@ export function useOllama() {
 }
 ```
 
-- [ ] **Step 4: 更新 Store 索引**
+- [x] **Step 4: 更新 Store 索引**
 
 ```typescript
 // src/store/index.ts
@@ -652,7 +652,7 @@ export { useDocumentStore } from './document';
 export { useChatStore } from './chat';
 ```
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add .
@@ -668,7 +668,7 @@ git commit -m "feat: add frontend stores for documents and chat, plus Ollama hoo
 - Create: `src/components/document/DocumentCard.tsx`
 - Update: `src/App.tsx`
 
-- [ ] **Step 1: 创建文档卡片组件**
+- [x] **Step 1: 创建文档卡片组件**
 
 `src/components/document/DocumentCard.tsx`:
 
@@ -677,7 +677,7 @@ git commit -m "feat: add frontend stores for documents and chat, plus Ollama hoo
 - 错误状态显示错误信息
 - 操作按钮：查看详情、重新处理、删除
 
-- [ ] **Step 2: 创建文档列表页面**
+- [x] **Step 2: 创建文档列表页面**
 
 `src/components/document/DocumentList.tsx`:
 
@@ -689,7 +689,7 @@ git commit -m "feat: add frontend stores for documents and chat, plus Ollama hoo
 - 显示导入进度
 - 空状态引导
 
-- [ ] **Step 3: 更新 App.tsx 注册文档路由**
+- [x] **Step 3: 更新 App.tsx 注册文档路由**
 
 ```tsx
 import { DocumentList } from './components/document/DocumentList';
@@ -697,7 +697,7 @@ import { DocumentList } from './components/document/DocumentList';
 <Route path="kb/:id/documents" element={<DocumentList />} />
 ```
 
-- [ ] **Step 4: 验证文档列表界面**
+- [x] **Step 4: 验证文档列表界面**
 
 ```bash
 npm run tauri dev
@@ -705,7 +705,7 @@ npm run tauri dev
 
 Expected: 进入知识库 → 管理文档 → 空状态 → 选择文件（文件选择器打开，暂不处理文件内容）
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add .
@@ -723,7 +723,7 @@ git commit -m "feat: add document list UI with card component and file import tr
 - Update: `src-tauri/src/commands/mod.rs`
 - Update: `src-tauri/src/lib.rs`
 
-- [ ] **Step 1: 实现 ChromaDB 进程管理**
+- [x] **Step 1: 实现 ChromaDB 进程管理**
 
 `src-tauri/src/services/chromadb.rs`:
 
@@ -739,7 +739,7 @@ git commit -m "feat: add document list UI with card component and file import tr
 
 数据目录配置：`{app_data}/chroma_db`
 
-- [ ] **Step 2: 实现 ChromaDB 操作封装**
+- [x] **Step 2: 实现 ChromaDB 操作封装**
 
 ```rust
 impl ChromaDBService {
@@ -754,7 +754,7 @@ impl ChromaDBService {
 
 所有操作通过 HTTP 调用 ChromaDB REST API。
 
-- [ ] **Step 3: 创建 ChromaDB Tauri Commands**
+- [x] **Step 3: 创建 ChromaDB Tauri Commands**
 
 ```rust
 #[tauri::command]
@@ -767,11 +767,11 @@ pub async fn stop_chromadb(state: State<'_, ChromaDBState>) -> Result<(), AppErr
 pub async fn get_chromadb_status(state: State<'_, ChromaDBState>) -> Result<ChromaDBStatus, AppError>
 ```
 
-- [ ] **Step 4: 注册到 Tauri 应用**
+- [x] **Step 4: 注册到 Tauri 应用**
 
 在 `lib.rs` 的 setup 中自动启动 ChromaDB，注册 `ChromaDBState` 和所有 Commands。
 
-- [ ] **Step 5: 前端 Ollama 状态组件**
+- [x] **Step 5: 前端 Ollama 状态组件**
 
 `src/components/settings/OllamaStatus.tsx`:
 
@@ -780,7 +780,7 @@ pub async fn get_chromadb_status(state: State<'_, ChromaDBState>) -> Result<Chro
 - "检测连接" 按钮
 - 简单的状态展示界面，完整管理功能在阶段7
 
-- [ ] **Step 6: 验证 ChromaDB 启动**
+- [x] **Step 6: 验证 ChromaDB 启动**
 
 ```bash
 npm run tauri dev
@@ -788,7 +788,7 @@ npm run tauri dev
 
 Expected: 应用启动时自动检测/启动 ChromaDB，设置页面显示状态。
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```bash
 git add .
@@ -799,9 +799,9 @@ git commit -m "feat: add ChromaDB embedded integration with auto-start and healt
 
 ## 阶段2完成标准
 
-- [ ] 所有数据模型 CRUD 操作通过 Tauri Commands 可用
-- [ ] Ollama 连接检测工作正常，可列出模型
-- [ ] ChromaDB 可自动启动/检测/健康检查
-- [ ] 文档管理界面可显示空状态和文件选择器
-- [ ] 设置页面显示 Ollama 连接状态
-- [ ] 所有 Rust 端代码编译通过，前端无 TS 错误
+- [x] 所有数据模型 CRUD 操作通过 Tauri Commands 可用
+- [x] Ollama 连接检测工作正常，可列出模型
+- [x] ChromaDB 可自动启动/检测/健康检查
+- [x] 文档管理界面可显示空状态和文件选择器
+- [x] 设置页面显示 Ollama 连接状态
+- [x] 所有 Rust 端代码编译通过，前端无 TS 错误

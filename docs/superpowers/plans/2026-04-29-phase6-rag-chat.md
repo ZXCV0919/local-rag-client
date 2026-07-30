@@ -10,6 +10,21 @@
 
 ---
 
+## 幻觉抑制（补充策略）
+
+面向「模型编造 / 越权常识回答」的两层缓解（均在 TypeScript + Ollama 侧实现，与检索门禁 `relevance-gate` 叠加）：
+
+| 方法 | 内容 | 实现难度 | 效果 | 说明 |
+|------|------|----------|------|------|
+| **Prompt 强约束** | 在系统提示中明确要求：不知道的不要说、禁止编造；与「仅能依据参考资料」规则并列 | 极低 | 高 | 不增加推理延迟；依赖模型遵从度，需与空检索时的拒绝话术一致 |
+| **回答后自检** | 主回答流结束后追加一次**非流式**短推理：给定检索摘要与用户问题，让模型输出 `{"grounded":boolean}` JSON；若 `false`，在答复末尾追加「自检提示」 | 低 | 中 | 额外一次 chat 调用与延迟；自检也可能误判，解析失败时 **fail-open**（不追加提示），避免阻断 |
+
+**配置：** SQLite `answer_self_check`（布尔，JSON），默认开启；设置页「对话可靠性」可关闭。
+
+**代码：** `src/services/llm/index.ts`（主流程串联自检）、`src/services/llm/answer-self-check.ts`（自检 prompt + JSON 解析）、`DEFAULT_SYSTEM_PROMPT` 强化文案。
+
+---
+
 ## File Structure
 
 ```
@@ -19,7 +34,8 @@ src/
 │   │   ├── index.ts            (LLM对话服务入口)
 │   │   ├── prompt-builder.ts   (Prompt构建)
 │   │   ├── context-window.ts   (上下文窗口管理)
-│   │   └── stream-handler.ts   (流式响应处理)
+│   │   ├── stream-handler.ts   (流式响应处理)
+│   │   └── answer-self-check.ts  (回答 groundedness 自检，可选)
 ├── components/
 │   └── chat/
 │       ├── ChatInterface.tsx   (对话主界面)
@@ -636,3 +652,4 @@ git commit -m "feat: add markdown rendering with GFM, syntax highlighting, and c
 - [ ] Markdown 渲染正常，代码块有语法高亮
 - [ ] 用户可以停止生成
 - [ ] Ollama 断连时有错误提示
+- [ ] 系统 Prompt 含「不知则不编造」类强约束；可选启用回答后自检并在设置中持久化

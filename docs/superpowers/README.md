@@ -14,7 +14,9 @@
 docs/superpowers/
 ├── README.md                                    ← 你在这里
 ├── specs/
-│   └── 2026-04-29-local-knowledge-base-design.md   ← 设计文档（架构/数据模型/UI/技术选型）
+│   ├── 2026-04-29-local-knowledge-base-design.md   ← 设计文档（架构/数据模型/UI/技术选型）
+│   ├── 2026-07-31-shortcomings-solutions.md        ← 秋招短板解决方案（按严重度）
+│   └── 2026-07-31-technical-tradeoffs.md           ← 技术取舍一页纸（面试）
 └── plans/
     ├── 2026-04-29-phase1-scaffolding.md        ← 阶段1：项目脚手架与基础设施
     ├── 2026-04-29-phase2-data-layer.md         ← 阶段2：数据层
@@ -22,7 +24,10 @@ docs/superpowers/
     ├── 2026-04-29-phase4-embedding-storage.md   ← 阶段4：向量化与存储
     ├── 2026-04-29-phase5-retrieval.md          ← 阶段5：检索引擎
     ├── 2026-04-29-phase6-rag-chat.md           ← 阶段6：RAG对话引擎
-    └── 2026-04-29-phase7-settings-polish.md    ← 阶段7：设置与打磨
+    ├── 2026-04-29-phase6.5-visual-youth-polish.md
+    ├── 2026-04-29-phase7-settings-polish.md    ← 阶段7：设置与打磨
+    ├── 2026-05-30-phase8-siliconflow-chat-provider.md
+    └── 2026-07-31-phase9-autumn-interview-hardening.md ← 阶段9：秋招面试硬化（P0/P1/P2）
 ```
 
 ## 阅读顺序
@@ -30,7 +35,9 @@ docs/superpowers/
 **先读设计文档，再按顺序读计划。**
 
 1. `specs/2026-04-29-local-knowledge-base-design.md` — 理解全局架构、数据模型、UI设计
-2. `plans/phase1` → `phase7` — 按阶段顺序实现
+2. `plans/phase1` → `phase8` — 按阶段顺序实现
+3. `specs/2026-07-31-shortcomings-solutions.md` + `plans/2026-07-31-phase9-…` — 秋招硬化（P0 已优先落地）
+4. 根目录 `README.md`、`docs/ops/troubleshooting.md`、`evals/RESULTS.md` — 运行、排障与评测基线
 
 ---
 

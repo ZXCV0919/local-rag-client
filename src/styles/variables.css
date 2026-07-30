@@ -1,0 +1,116 @@
+:root {
+  --color-accent: #6366f1;
+  --color-accent-hover: #4f46e5;
+  --color-on-accent: #ffffff;
+  --sidebar-width: 248px;
+  --titlebar-height: 38px;
+  /* Typography scale */
+  --text-page-title: 1.5rem;
+  --text-section: 1.0625rem;
+  --text-body: 0.875rem;
+  --text-meta: 0.75rem;
+  /* Card / panel vs controls — consumed as rounded-[length:var(--radius-*)] */
+  --radius-card: 14px;
+  --radius-control: 10px;
+  --shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-text-primary) 6%, transparent);
+  --shadow-float:
+    0 10px 40px -12px color-mix(in srgb, var(--color-text-primary) 14%, transparent),
+    0 4px 16px -6px color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+  --font-sans:
+    'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono:
+    'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
+/* 未设置 data-theme 时与浅色一致（main.tsx 会尽早写入 data-theme） */
+:root:not([data-theme]),
+:root[data-theme='light'] {
+  --color-bg-primary: #f5f5f5;
+  --color-bg-secondary: #ebebeb;
+  --color-surface: #ffffff;
+  /* Unified light chrome — sidebar/titlebar match surface, not dark strip */
+  --color-bg-sidebar: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-bg-active: #f1f5f9;
+  --color-text-primary: #18181b;
+  --color-text-secondary: #71717a;
+  --color-text-sidebar: #18181b;
+  --color-text-sidebar-dim: #71717a;
+  --color-border: #e5e7eb;
+  --color-border-dark: #d1d5db;
+  --color-border-sidebar: #e5e7eb;
+  --color-muted-bg: #f1f5f9;
+  --color-user-bubble-bg: #f1f5f9;
+  --color-user-bubble-fg: #18181b;
+  --color-sidebar-icon-bg: #f1f5f9;
+  --color-sidebar-icon-fg: #64748b;
+  --color-code-bg: #f0f1f4;
+  --color-code-block-bg: #1e1e2e;
+  --color-code-block-fg: #dddde7;
+  --color-btn-ghost-hover: #f4f5f8;
+  --color-danger-text: #b91c1c;
+  --color-danger-border: #fecaca;
+  --color-danger-hover-bg: #fef2f2;
+  --badge-neutral-bg: #f4f4f5;
+  --badge-neutral-fg: #3f3f46;
+  --badge-info-bg: #dbeafe;
+  --badge-info-fg: #1d4ed8;
+  --badge-success-bg: #dcfce7;
+  --badge-success-fg: #15803d;
+  --badge-error-bg: #fee2e2;
+  --badge-error-fg: #b91c1c;
+  --color-citation-bg: rgba(99, 102, 241, 0.12);
+  --color-citation-fg: var(--color-accent);
+  --color-citation-border: rgba(99, 102, 241, 0.35);
+  --color-citation-hover-bg: rgba(99, 102, 241, 0.18);
+  --gradient-page: var(--color-bg-primary);
+}
+
+:root[data-theme='dark'] {
+  --color-bg-primary: #0c0e14;
+  --color-bg-secondary: #141824;
+  --color-surface: #1a1f2e;
+  --color-bg-sidebar: #12151f;
+  --color-bg-hover: #252a3a;
+  --color-bg-active: #2d3548;
+  --color-user-bubble-bg: #252a3a;
+  --color-user-bubble-fg: #f1f5f9;
+  --color-sidebar-icon-bg: #252a3a;
+  --color-sidebar-icon-fg: #94a3b8;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-sidebar: #e2e8f0;
+  --color-text-sidebar-dim: #94a3b8;
+  --color-border: #2d3748;
+  --color-border-dark: #3d4a5c;
+  --color-border-sidebar: #2d3748;
+  --color-muted-bg: #2d3748;
+  --color-code-bg: #1e293b;
+  --color-code-block-bg: #12151f;
+  --color-code-block-fg: #e2e8f0;
+  --color-btn-ghost-hover: rgba(255, 255, 255, 0.06);
+  --color-danger-text: #fca5a5;
+  --color-danger-border: rgba(248, 113, 113, 0.35);
+  --color-danger-hover-bg: rgba(127, 29, 29, 0.35);
+  --badge-neutral-bg: #374151;
+  --badge-neutral-fg: #e5e7eb;
+  --badge-info-bg: rgba(59, 130, 246, 0.22);
+  --badge-info-fg: #93c5fd;
+  --badge-success-bg: rgba(34, 197, 94, 0.22);
+  --badge-success-fg: #86efac;
+  --badge-error-bg: rgba(239, 68, 68, 0.22);
+  --badge-error-fg: #fca5a5;
+  --color-citation-bg: rgba(129, 140, 248, 0.18);
+  --color-citation-fg: #c7d2fe;
+  --color-citation-border: rgba(165, 180, 252, 0.35);
+  --color-citation-hover-bg: rgba(129, 140, 248, 0.28);
+  --color-bg-gradient-mid: rgba(99, 102, 241, 0.07);
+  --gradient-page:
+    radial-gradient(ellipse 140% 90% at 50% -25%, var(--color-bg-gradient-mid), transparent 52%),
+    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(56, 189, 248, 0.04), transparent 45%),
+    var(--color-bg-primary);
+}
