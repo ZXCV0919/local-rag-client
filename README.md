@@ -94,8 +94,8 @@ npm run tauri:build
 
 - 设计：[`docs/superpowers/specs/2026-04-29-local-knowledge-base-design.md`](docs/superpowers/specs/2026-04-29-local-knowledge-base-design.md)
 - 阶段计划：[`docs/superpowers/README.md`](docs/superpowers/README.md)
-- 秋招短板方案：[`docs/superpowers/specs/2026-07-31-shortcomings-solutions.md`](docs/superpowers/specs/2026-07-31-shortcomings-solutions.md)
-- Phase 9 执行计划：[`docs/superpowers/plans/2026-07-31-phase9-autumn-interview-hardening.md`](docs/superpowers/plans/2026-07-31-phase9-autumn-interview-hardening.md)
+- 技术取舍：[`docs/superpowers/specs/2026-07-31-technical-tradeoffs.md`](docs/superpowers/specs/2026-07-31-technical-tradeoffs.md)
+- 评测结果：[`evals/LIVE_RESULTS.md`](evals/LIVE_RESULTS.md) · [`evals/RESULTS.md`](evals/RESULTS.md)
 
 ## 架构一览
 
