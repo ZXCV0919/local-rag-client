@@ -82,6 +82,7 @@ export function DocumentPreviewPane({
 
   useLayoutEffect(() => {
     if (!focusChunkId || loading) return;
+    if (!doc || doc.id !== documentId) return;
     if (lastHandledNonce.current === focusNonce) return;
     lastHandledNonce.current = focusNonce;
 
@@ -107,7 +108,7 @@ export function DocumentPreviewPane({
     target.classList.remove('chunk-highlight-mark');
     void target.offsetWidth;
     target.classList.add('chunk-highlight-mark');
-  }, [focusChunkId, focusNonce, chunks, truncated, loading, addToast]);
+  }, [focusChunkId, focusNonce, chunks, truncated, loading, addToast, doc, documentId]);
 
   if (!documentId) {
     return (
