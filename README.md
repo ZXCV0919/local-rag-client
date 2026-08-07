@@ -4,6 +4,22 @@
 
 当前版本：**1.0.0**（Windows x64 安装包见 `release/v1.0.0/`）
 
+## 界面预览
+
+截图请放在 `docs/screenshots/`（本地运行后自行截取并提交）：
+
+| 文件 | 内容 |
+|------|------|
+| `docs/screenshots/01-overview.png` | 知识库总览 / 空状态引导 |
+| `docs/screenshots/02-chat-citation.png` | 对话 + 引用 |
+| `docs/screenshots/03-settings-health.png` | 设置或依赖健康提示 |
+
+![知识库总览](docs/screenshots/01-overview.png)
+![对话与引用](docs/screenshots/02-chat-citation.png)
+![设置或健康状态](docs/screenshots/03-settings-health.png)
+
+演示步骤见 [`docs/ops/demo-checklist.md`](docs/ops/demo-checklist.md)（含 90–120 秒录屏脚本）。空库时可点「导入演示语料」快速体验。
+
 ## 功能概览
 
 - 多知识库隔离管理
