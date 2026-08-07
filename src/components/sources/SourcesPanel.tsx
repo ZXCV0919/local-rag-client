@@ -1,11 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSourcesPanelContext } from '../../context/SourcesPanelContext';
 import { tauriCommand } from '../../hooks/useDatabase';
+import { useToastStore } from '../../store/toast';
 import type { Document } from '../../types/document';
 import { DocumentPreviewPane } from './DocumentPreviewPane';
 
 export function SourcesPanel() {
   const { id: kbId } = useParams<{ id: string }>();
+  const { focusChunk } = useSourcesPanelContext();
+  const addToast = useToastStore((s) => s.addToast);
+  const lastFocusNonce = useRef<number | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -47,6 +52,20 @@ export function SourcesPanel() {
       cancelled = true;
     };
   }, [kbId]);
+
+  useEffect(() => {
+    if (!focusChunk) return;
+    if (loading) return;
+    if (lastFocusNonce.current === focusChunk.nonce) return;
+    lastFocusNonce.current = focusChunk.nonce;
+
+    const exists = documents.some((d) => d.id === focusChunk.documentId);
+    if (!exists) {
+      addToast({ type: 'warning', title: '找不到该文档', duration: 3000 });
+      return;
+    }
+    setSelectedDocId(focusChunk.documentId);
+  }, [focusChunk, documents, loading, addToast]);
 
   if (!kbId) {
     return (
@@ -97,7 +116,15 @@ export function SourcesPanel() {
           </ul>
         </div>
       </div>
-      <DocumentPreviewPane documentId={selectedDocId} />
+      <DocumentPreviewPane
+        documentId={selectedDocId}
+        focusChunkId={
+          focusChunk && selectedDocId === focusChunk.documentId
+            ? focusChunk.chunkId
+            : null
+        }
+        focusNonce={focusChunk?.nonce ?? 0}
+      />
     </div>
   );
 }
