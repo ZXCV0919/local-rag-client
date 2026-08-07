@@ -6,6 +6,7 @@ import { Titlebar } from './Titlebar';
 import { Sidebar } from './Sidebar';
 import { ThemeBootstrap } from '../settings/ThemeBootstrap';
 import { NavigationGuardDialog } from './NavigationGuardDialog';
+import { DependencyHealthBanner } from '../common/DependencyHealthBanner';
 
 export function AppLayout() {
   return (
@@ -15,6 +16,7 @@ export function AppLayout() {
       <ToastHost />
       <GlobalShortcuts />
       <Titlebar />
+      <DependencyHealthBanner />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main
