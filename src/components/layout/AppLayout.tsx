@@ -17,7 +17,10 @@ export function AppLayout() {
       <Titlebar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex min-w-0 flex-1 flex-col overflow-y-auto bg-[var(--color-bg-primary)]">
+        <main
+          className="flex min-w-0 flex-1 flex-col overflow-y-auto"
+          style={{ background: 'var(--gradient-page)' }}
+        >
           <ErrorBoundary>
             <div className="flex min-h-0 flex-1 flex-col">
               <Outlet />

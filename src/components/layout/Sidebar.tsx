@@ -7,6 +7,7 @@ import type { KnowledgeBaseRow } from '../../types/knowledge-base';
 import { knowledgeBaseFromRow } from '../../types/knowledge-base';
 import { useKnowledgeBaseStore } from '../../store/knowledge-base';
 import { kbThemeForId } from '../../utils/kb-theme';
+import { BrandMark } from '../brand/BrandMark';
 
 function sidebarItemClass(active: boolean): string {
   const base =
@@ -40,12 +41,7 @@ export function Sidebar() {
     <aside className="flex h-full w-[var(--sidebar-width)] min-w-[var(--sidebar-width)] flex-col overflow-hidden border-r border-[var(--color-border-sidebar)] bg-[var(--color-bg-sidebar)] text-[var(--color-text-sidebar)]">
       <div className="border-b border-[var(--color-border-sidebar)] px-3 py-3">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-sidebar-icon-bg)] text-[var(--color-sidebar-icon-fg)]">
-            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" strokeLinecap="round" />
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
+          <BrandMark size={36} />
           <span className="truncate text-sm font-semibold tracking-tight text-[var(--color-text-sidebar)]">本地知识库</span>
         </div>
         <div className="mt-3 flex items-center justify-between gap-2">
