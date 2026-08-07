@@ -6,6 +6,21 @@ import { useToastStore } from '../../store/toast';
 import type { Document } from '../../types/document';
 import { DocumentPreviewPane } from './DocumentPreviewPane';
 
+function statusLabel(status: Document['status']): string {
+  switch (status) {
+    case 'ready':
+      return '就绪';
+    case 'processing':
+      return '处理中';
+    case 'pending':
+      return '等待中';
+    case 'error':
+      return '错误';
+    default:
+      return status;
+  }
+}
+
 export function SourcesPanel() {
   const { id: kbId } = useParams<{ id: string }>();
   const { focusChunk } = useSourcesPanelContext();
@@ -76,8 +91,19 @@ export function SourcesPanel() {
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden">
-      <div className="flex max-h-[45%] min-h-[120px] shrink-0 flex-col border-b border-[var(--color-border)]">
+    <div className="flex h-full min-h-0 overflow-hidden">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-r border-[var(--color-border)]">
+        <DocumentPreviewPane
+          documentId={selectedDocId}
+          focusChunkId={
+            focusChunk && selectedDocId === focusChunk.documentId
+              ? focusChunk.chunkId
+              : null
+          }
+          focusNonce={focusChunk?.nonce ?? 0}
+        />
+      </div>
+      <div className="flex w-[min(200px,38%)] shrink-0 flex-col overflow-hidden">
         <div className="shrink-0 px-3 py-2 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">
           文档
         </div>
@@ -99,15 +125,15 @@ export function SourcesPanel() {
                   <button
                     type="button"
                     onClick={() => setSelectedDocId(doc.id)}
-                    className={`flex w-full items-baseline justify-between gap-2 px-3 py-1.5 text-left text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)] ${
+                    className={`flex w-full flex-col gap-0.5 px-3 py-1.5 text-left text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)] ${
                       selected
                         ? 'bg-[var(--color-bg-active)] text-[var(--color-text-primary)]'
                         : 'text-[var(--color-text-primary)] hover:bg-[var(--color-bg-hover)]'
                     }`}
                   >
-                    <span className="min-w-0 truncate">{doc.file_name}</span>
-                    <span className="shrink-0 text-[11px] text-[var(--color-text-secondary)]">
-                      {doc.status}
+                    <span className="min-w-0 truncate font-medium">{doc.file_name}</span>
+                    <span className="truncate text-[11px] text-[var(--color-text-secondary)]">
+                      {statusLabel(doc.status)}
                     </span>
                   </button>
                 </li>
@@ -116,15 +142,6 @@ export function SourcesPanel() {
           </ul>
         </div>
       </div>
-      <DocumentPreviewPane
-        documentId={selectedDocId}
-        focusChunkId={
-          focusChunk && selectedDocId === focusChunk.documentId
-            ? focusChunk.chunkId
-            : null
-        }
-        focusNonce={focusChunk?.nonce ?? 0}
-      />
     </div>
   );
 }
