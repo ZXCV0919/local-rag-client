@@ -194,7 +194,7 @@ export function RetrievalWorkbench({
             {children}
           </div>
           {drawerOpen ? (
-            <aside className="flex w-[min(360px,38%)] shrink-0 flex-col border-l border-[var(--color-border)] bg-[var(--color-surface)]">
+            <aside className="flex min-h-0 w-[min(360px,38%)] shrink-0 flex-col overflow-hidden border-l border-[var(--color-border)] bg-[var(--color-surface)]">
               <div className="flex shrink-0 flex-col gap-2 border-b border-[var(--color-border)] p-3">
                 <ModeSelector value={mode} onChange={setMode} />
                 <input
@@ -219,15 +219,17 @@ export function RetrievalWorkbench({
                   {loading ? '检索中…' : '排查检索'}
                 </button>
               </div>
-              <SearchResultsPanel
-                className="min-h-0 flex-1"
-                chunks={result?.chunks ?? []}
-                loading={loading}
-                error={error}
-                modeLabel={modeLabel}
-                hasSearched={searchAttempted}
-                totalCandidates={result?.totalCandidates ?? -1}
-              />
+              <div className="min-h-0 flex-1 overflow-hidden">
+                <SearchResultsPanel
+                  className="h-full min-h-0 overflow-hidden"
+                  chunks={result?.chunks ?? []}
+                  loading={loading}
+                  error={error}
+                  modeLabel={modeLabel}
+                  hasSearched={searchAttempted}
+                  totalCandidates={result?.totalCandidates ?? -1}
+                />
+              </div>
             </aside>
           ) : null}
         </div>

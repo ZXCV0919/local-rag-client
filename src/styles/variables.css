@@ -49,7 +49,7 @@
   --color-code-bg: #f1f3f5;
   --color-code-block-bg: #18181b;
   --color-code-block-fg: #e4e4e7;
-  --color-btn-ghost-hover: color-mix(in srgb, #ffffff 8%, transparent);
+  --color-btn-ghost-hover: #efece6;
   --color-danger-text: #b91c1c;
   --color-danger-border: #fecaca;
   --color-danger-hover-bg: #fef2f2;
