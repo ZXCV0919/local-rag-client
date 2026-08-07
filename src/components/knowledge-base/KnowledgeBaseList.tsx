@@ -147,9 +147,8 @@ export function KnowledgeBaseList() {
               primaryLabel="创建第一个知识库"
               onPrimary={() => setShowCreate(true)}
               secondaryLabel={seeding ? '导入中…' : '导入演示语料'}
-              onSecondary={() => {
-                if (!seeding) void handleSeedDemo();
-              }}
+              secondaryDisabled={seeding}
+              onSecondary={() => void handleSeedDemo()}
             />
           </div>
         ) : (

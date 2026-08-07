@@ -8,6 +8,7 @@ export type EmptyStateProps = {
   onPrimary: () => void;
   secondaryLabel?: string;
   onSecondary?: () => void;
+  secondaryDisabled?: boolean;
   steps?: string[];
   icon?: ReactNode;
 };
@@ -19,6 +20,7 @@ export function EmptyState({
   onPrimary,
   secondaryLabel,
   onSecondary,
+  secondaryDisabled,
   steps,
   icon,
 }: EmptyStateProps) {
@@ -59,8 +61,9 @@ export function EmptyState({
         {secondaryLabel && onSecondary ? (
           <button
             type="button"
+            disabled={secondaryDisabled}
             onClick={onSecondary}
-            className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
             {secondaryLabel}
           </button>
