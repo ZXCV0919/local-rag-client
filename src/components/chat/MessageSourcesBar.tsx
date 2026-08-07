@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { useSourcesPanelContext } from '../../context/SourcesPanelContext';
 
-import { useAppNavigate } from '../../hooks/useAppNavigate';
-
 import { tauriCommand } from '../../hooks/useDatabase';
 
 import type { CitationPart } from '../../utils/citations';
@@ -30,9 +28,7 @@ export interface MessageSourcesBarProps {
 
 export function MessageSourcesBar({ parts, chunkIds, highlightQuery }: MessageSourcesBarProps) {
 
-  const navigate = useAppNavigate();
-
-  const { setOpen: setSourcesPanelOpen } = useSourcesPanelContext();
+  const { revealChunk } = useSourcesPanelContext();
 
   const [open, setOpen] = useState(true);
 
@@ -205,10 +201,10 @@ export function MessageSourcesBar({ parts, chunkIds, highlightQuery }: MessageSo
                   chunk
 
                     ? () => {
-                        setSourcesPanelOpen(true);
-                        navigate(
-                          `/documents/${chunk.document_id}?chunk=${encodeURIComponent(chunk.id)}`,
-                        );
+                        revealChunk({
+                          documentId: chunk.document_id,
+                          chunkId: chunk.id,
+                        });
                       }
 
                     : undefined

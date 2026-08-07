@@ -12,7 +12,11 @@ import type { Message } from '../../types/conversation';
 
 import { parseCitations } from '../../utils/citations';
 
-import { CitationPopover } from './CitationPopup';
+import { useSourcesPanelContext } from '../../context/SourcesPanelContext';
+import { tauriCommand } from '../../hooks/useDatabase';
+import { useToastStore } from '../../store/toast';
+import type { ChunkRow } from '../../types/chunk';
+import { chunkFromRow } from '../../types/chunk';
 
 import { MessageSourcesBar } from './MessageSourcesBar';
 
@@ -255,6 +259,9 @@ export function MessageBubble({
 
   const isUser = message.role === 'user';
 
+  const { revealChunk } = useSourcesPanelContext();
+  const addToast = useToastStore((s) => s.addToast);
+
 
 
   const assistantBody =
@@ -355,7 +362,28 @@ export function MessageBubble({
 
                     type="button"
 
-                    className="mx-0.5 inline-flex items-center gap-0.5 rounded-full border border-[var(--color-citation-border)] bg-[var(--color-citation-bg)] px-2 py-0.5 align-baseline text-[length:var(--text-meta)] font-medium text-[var(--color-citation-fg)] hover:bg-[var(--color-citation-hover-bg)]"
+                    disabled={!chunkId}
+
+                    onClick={async () => {
+                      if (!chunkId) return;
+                      try {
+                        const row = await tauriCommand<ChunkRow>('get_chunk', { id: chunkId });
+                        const chunk = chunkFromRow(row);
+                        revealChunk({
+                          documentId: chunk.document_id,
+                          chunkId: chunk.id,
+                        });
+                      } catch (e) {
+                        addToast({
+                          type: 'warning',
+                          title: '未找到对应片段',
+                          message: e instanceof Error ? e.message : String(e),
+                          duration: 3500,
+                        });
+                      }
+                    }}
+
+                    className="mx-0.5 inline-flex items-center gap-0.5 rounded-full border border-[var(--color-citation-border)] bg-[var(--color-citation-bg)] px-2 py-0.5 align-baseline text-[length:var(--text-meta)] font-medium text-[var(--color-citation-fg)] hover:bg-[var(--color-citation-hover-bg)] disabled:opacity-40"
 
                   >
 
@@ -367,41 +395,7 @@ export function MessageBubble({
 
                 );
 
-                if (!chunkId) {
-
-                  return (
-
-                    <span key={i} title="缺少引用映射">
-
-                      {btn}
-
-                    </span>
-
-                  );
-
-                }
-
-                return (
-
-                  <CitationPopover
-
-                    key={i}
-
-                    chunkId={chunkId}
-
-                    refIndex={part.refIndex}
-
-                    fileLabel={part.fileLabel}
-
-                    highlightQuery={highlightQuery}
-
-                  >
-
-                    {btn}
-
-                  </CitationPopover>
-
-                );
+                return <span key={i}>{btn}</span>;
 
               })}
 
