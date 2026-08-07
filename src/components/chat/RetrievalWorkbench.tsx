@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Group, Panel, useDefaultLayout } from 'react-resizable-panels';
 import { KbChatWorkbenchProvider } from '../../context/KbChatWorkbenchContext';
-import { ColumnSplitterHandle } from '../common/PanelSplitterHandles';
 import { tauriCommand } from '../../hooks/useDatabase';
 import { retrieve, type RetrievalResult } from '../../services/retrieval';
 import type { KnowledgeBase, KnowledgeBaseRow } from '../../types/knowledge-base';
@@ -66,6 +64,7 @@ export function RetrievalWorkbench({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -148,12 +147,6 @@ export function RetrievalWorkbench({
     onConversationsNeedRefresh?.();
   }, [onConversationsNeedRefresh]);
 
-  const retrievalLayout = useDefaultLayout({
-    id: 'kb-retrieval-split',
-    storage: localStorage,
-    panelIds: ['main', 'results'],
-  });
-
   const workbench = useMemo(
     () => ({
       kb,
@@ -186,53 +179,58 @@ export function RetrievalWorkbench({
 
   return (
     <KbChatWorkbenchProvider value={workbench}>
-      <div className="flex flex-col flex-1 min-h-0 gap-3">
-        <div className="flex flex-wrap items-center gap-3 shrink-0 px-4 pt-3">
-          <ModeSelector value={mode} onChange={setMode} />
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') void runSearch();
-            }}
-            placeholder="输入检索问题…"
-            disabled={!kb}
-            className="min-w-[160px] max-w-xl flex-1 rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
-          />
+      <div className="relative flex min-h-0 flex-1 flex-col">
+        <div className="flex shrink-0 items-center justify-end gap-2 px-4 pt-2">
           <button
             type="button"
-            onClick={() => void runSearch()}
-            disabled={!kb || loading || !query.trim()}
-            className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2 text-sm text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
+            onClick={() => setDrawerOpen((v) => !v)}
+            className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
-            {loading ? '检索中…' : '检索'}
+            {drawerOpen ? '关闭排查' : '排查检索'}
           </button>
         </div>
-
-        <Group
-          id="kb-retrieval-split"
-          orientation="horizontal"
-          className="flex min-h-0 min-w-0 flex-1 flex-col px-2 pb-2"
-          defaultLayout={retrievalLayout.defaultLayout}
-          onLayoutChanged={retrievalLayout.onLayoutChanged}
-        >
-          <Panel id="main" defaultSize="74%" minSize="42%" className="min-w-0">
-            <div className="flex h-full min-h-0 flex-col overflow-hidden">{children}</div>
-          </Panel>
-          <ColumnSplitterHandle />
-          <Panel id="results" defaultSize="26%" minSize="16%" maxSize="42%" className="min-w-0">
-            <SearchResultsPanel
-              className="h-full min-h-0"
-              chunks={result?.chunks ?? []}
-              loading={loading}
-              error={error}
-              modeLabel={modeLabel}
-              hasSearched={searchAttempted}
-              totalCandidates={result?.totalCandidates ?? -1}
-            />
-          </Panel>
-        </Group>
+        <div className="flex min-h-0 flex-1">
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+            {children}
+          </div>
+          {drawerOpen ? (
+            <aside className="flex w-[min(360px,38%)] shrink-0 flex-col border-l border-[var(--color-border)] bg-[var(--color-surface)]">
+              <div className="flex shrink-0 flex-col gap-2 border-b border-[var(--color-border)] p-3">
+                <ModeSelector value={mode} onChange={setMode} />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') void runSearch();
+                  }}
+                  placeholder="排查检索：先看命中片段…"
+                  title="检索工作台：先看检索命中，再决定要不要问模型"
+                  disabled={!kb}
+                  className="w-full rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
+                />
+                <button
+                  type="button"
+                  onClick={() => void runSearch()}
+                  disabled={!kb || loading || !query.trim()}
+                  title="先看检索命中，再决定要不要问模型"
+                  className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2 text-sm text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
+                >
+                  {loading ? '检索中…' : '排查检索'}
+                </button>
+              </div>
+              <SearchResultsPanel
+                className="min-h-0 flex-1"
+                chunks={result?.chunks ?? []}
+                loading={loading}
+                error={error}
+                modeLabel={modeLabel}
+                hasSearched={searchAttempted}
+                totalCandidates={result?.totalCandidates ?? -1}
+              />
+            </aside>
+          ) : null}
+        </div>
       </div>
     </KbChatWorkbenchProvider>
   );

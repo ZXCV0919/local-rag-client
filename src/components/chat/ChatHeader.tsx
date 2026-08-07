@@ -30,20 +30,25 @@ export function ChatHeader({ kbName, model, retrievalMode, chatProvider = 'ollam
   const badge = PROVIDER_BADGE[chatProvider];
 
   return (
-    <header className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--color-border)] pb-3">
-      <h2 className="text-[length:var(--text-section)] font-semibold text-[var(--color-text-primary)] truncate">
-        {kbName}
-      </h2>
-      <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-0.5 text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">
-        {MODE_LABELS[retrievalMode]}
-      </span>
-      <span
-        className={`rounded-full border px-2 py-0.5 text-[length:var(--text-meta)] font-medium ${badge.className}`}
-        title={chatProvider === 'siliconflow' ? '对话走硅基流动云端' : '对话走本地 Ollama'}
-      >
-        {badge.label}
-      </span>
-      <span className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)] truncate">{model}</span>
+    <header className="flex shrink-0 flex-col gap-1 border-b border-[var(--color-border)] pb-3">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <h2 className="text-[length:var(--text-section)] font-semibold text-[var(--color-text-primary)] truncate">
+          {kbName}
+        </h2>
+        <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-0.5 text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">
+          {MODE_LABELS[retrievalMode]}
+        </span>
+        <span
+          className={`rounded-full border px-2 py-0.5 text-[length:var(--text-meta)] font-medium ${badge.className}`}
+          title={chatProvider === 'siliconflow' ? '对话走硅基流动云端' : '对话走本地 Ollama'}
+        >
+          {badge.label}
+        </span>
+        <span className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)] truncate">{model}</span>
+      </div>
+      <p className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">
+        在下方提问；需要核对命中时点「排查检索」。
+      </p>
     </header>
   );
 }

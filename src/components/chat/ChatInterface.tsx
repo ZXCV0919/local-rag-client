@@ -638,9 +638,9 @@ export function ChatInterface() {
 
   return (
 
-    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-[720px] flex-1 flex-col overflow-hidden px-4">
 
-      <div className="flex w-full min-w-0 shrink-0 flex-col px-4 pt-1 md:px-6">
+      <div className="flex w-full min-w-0 shrink-0 flex-col pt-1">
 
         {kb ? (
           <ChatHeader
@@ -657,7 +657,7 @@ export function ChatInterface() {
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
 
-        <div className="flex w-full min-w-0 min-h-0 flex-1 flex-col px-4 md:px-6">
+        <div className="flex w-full min-w-0 min-h-0 flex-1 flex-col">
 
           {chatError ? (
 

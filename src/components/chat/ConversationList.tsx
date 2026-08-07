@@ -160,7 +160,7 @@ export function ConversationList({ refreshTick = 0 }: { refreshTick?: number }) 
 
     <>
 
-      <div className="flex w-full max-w-xs flex-col gap-2 border-r border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface)_72%,var(--color-bg-primary))] p-3">
+      <div className="flex w-[200px] min-w-[200px] shrink-0 flex-col gap-2 border-r border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface)_72%,var(--color-bg-primary))] p-3">
 
         <button
 

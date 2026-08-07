@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppNavigate } from '../../hooks/useAppNavigate';
 import type { Message } from '../../types/conversation';
+import { EmptyState } from '../common/EmptyState';
 import { MessageBubble } from './MessageBubble';
 
 export interface MessageListProps {
@@ -24,6 +27,8 @@ export function MessageList({
   highlightQuery,
 }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { id: kbId } = useParams<{ id: string }>();
+  const navigate = useAppNavigate();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -47,22 +52,26 @@ export function MessageList({
   return (
     <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-1 pb-2">
       {showEmpty ? (
-        <div className="flex min-h-[min(420px,60vh)] flex-col items-center justify-center gap-4 px-4 py-10 text-center">
-          <div
-            className="flex h-16 w-16 items-center justify-center rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-accent)_12%,var(--color-surface))] text-[var(--color-accent)] shadow-[var(--shadow-sm)]"
-            aria-hidden
-          >
-            <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-              <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M8 9h8M8 13h5" strokeLinecap="round" />
-            </svg>
-          </div>
-          <div className="max-w-sm space-y-1">
-            <p className="text-base font-semibold text-[var(--color-text-primary)]">从这里开始对话</p>
-            <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-              用下方输入框提问，模型会结合检索到的片段作答；也可先用顶部检索栏摸索资料。
-            </p>
-          </div>
+        <div className="flex min-h-[min(420px,60vh)] items-center justify-center">
+          <EmptyState
+            title="问一句试试"
+            description="基于本库文档检索后回答。需要核对命中时，点「排查检索」。"
+            primaryLabel="开始提问"
+            onPrimary={() => document.querySelector<HTMLTextAreaElement>('textarea')?.focus()}
+            secondaryLabel={kbId ? '去导入文档' : undefined}
+            onSecondary={kbId ? () => navigate(`/kb/${kbId}/documents`) : undefined}
+            steps={['导入文档并等待「就绪」', '在下方输入问题', '查看回答中的引用溯源']}
+            icon={
+              <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+                <path
+                  d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path d="M8 9h8M8 13h5" strokeLinecap="round" />
+              </svg>
+            }
+          />
         </div>
       ) : null}
       {messages.map((m) => (

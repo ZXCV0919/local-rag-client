@@ -38,7 +38,7 @@ export function ChatSessionPlaceholder() {
       <div className="max-w-sm space-y-2">
         <p className="font-medium text-[var(--color-text-primary)]">选择或新建对话</p>
         <p className="leading-relaxed">
-          从左侧选一条历史，或点「新建对话」后在下方提问。上方检索栏仅用于核对命中片段。
+          从左侧选一条历史，或点「新建对话」后在下方提问。需要核对命中时点「排查检索」。
         </p>
       </div>
     </div>
