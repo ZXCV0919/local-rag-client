@@ -22,7 +22,7 @@ import { estimateTokenCount } from '../../utils/token-counter';
 
 import { ChatHeader } from './ChatHeader';
 
-import { InputBar } from './InputBar';
+import { ComposerBar } from './ComposerBar';
 
 import { MessageList } from './MessageList';
 
@@ -670,7 +670,7 @@ export function ChatInterface() {
           </div>
         </div>
 
-        <InputBar
+        <ComposerBar
           disabled={!kb}
           streaming={pipelineRunning}
           showSuggestions={showEmpty}
