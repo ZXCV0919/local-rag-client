@@ -147,7 +147,8 @@ export function KnowledgeBaseOverview() {
 
   const health = summarizeDocumentHealth(docs);
   const chunkTotal = docs.reduce((sum, d) => sum + (d.chunk_count ?? 0), 0);
-  const docCount = docsError ? kb.document_count : health.total || kb.document_count;
+  // Prefer loaded docs total; only fall back to kb.document_count when list failed.
+  const docCount = docsError ? kb.document_count : health.total;
   const statusLabel = docsError
     ? '—'
     : health.error
