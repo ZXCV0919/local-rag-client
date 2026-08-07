@@ -63,6 +63,21 @@ body {
   animation: message-fade-in 0.22s ease-out both;
 }
 
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-fade-in 0.18s ease-out both;
+}
+
 @keyframes chunk-highlight-pulse {
   0% {
     box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 55%, transparent);
@@ -79,12 +94,6 @@ body {
   animation: chunk-highlight-pulse 0.75s ease-out;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .message-enter,
-  .chunk-highlight-mark {
-    animation: none;
-  }
-}
 
 .chat-markdown .hljs-keyword,
 .chat-markdown .hljs-selector-tag {
@@ -123,9 +132,20 @@ body {
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .message-enter,
+  .chunk-highlight-mark,
+  .page-enter {
+    animation: none;
+  }
+
+  .motion-safe\:hover\:-translate-y-0\.5:hover,
+  .hover\:-translate-y-0\.5:hover {
+    transform: none !important;
   }
 }
 

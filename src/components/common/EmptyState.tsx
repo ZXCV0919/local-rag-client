@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { BrandMark } from '../brand/BrandMark';
 
 export type EmptyStateProps = {
   title: string;
@@ -23,21 +24,16 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 px-6 py-12 text-center">
-      <div
-        className="flex h-14 w-14 items-center justify-center rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-accent)_12%,var(--color-surface))] text-[var(--color-accent)] shadow-[var(--shadow-sm)]"
-        aria-hidden
-      >
-        {icon ?? (
-          <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" strokeLinecap="round" />
-            <path
-              d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
-      </div>
+      {icon ? (
+        <div
+          className="flex h-14 w-14 items-center justify-center rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-accent)_12%,var(--color-surface))] text-[var(--color-accent)] shadow-[var(--shadow-sm)]"
+          aria-hidden
+        >
+          {icon}
+        </div>
+      ) : (
+        <BrandMark size={36} className="shadow-[var(--shadow-sm)]" />
+      )}
       <div className="max-w-sm space-y-1">
         <p className="text-base font-semibold text-[var(--color-text-primary)]">{title}</p>
         <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">{description}</p>
