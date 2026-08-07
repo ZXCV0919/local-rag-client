@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { KbChatWorkbenchProvider } from '../../context/KbChatWorkbenchContext';
 import { tauriCommand } from '../../hooks/useDatabase';
 import { retrieve, type RetrievalResult } from '../../services/retrieval';
@@ -180,22 +181,51 @@ export function RetrievalWorkbench({
   return (
     <KbChatWorkbenchProvider value={workbench}>
       <div className="relative flex min-h-0 flex-1 flex-col">
-        <div className="flex shrink-0 items-center justify-end gap-2 px-4 pt-2">
+        <div className="pointer-events-none absolute right-3 top-2 z-10 flex items-center gap-1">
+          <Link
+            to={`/kb/${kbId}/documents`}
+            title="文档"
+            aria-label="文档"
+            className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-[length:var(--radius-control)] text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
           <button
             type="button"
             onClick={() => setDrawerOpen((v) => !v)}
-            className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-1.5 text-xs font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            title={drawerOpen ? '关闭排查' : '排查检索'}
+            aria-label={drawerOpen ? '关闭排查' : '排查检索'}
+            aria-pressed={drawerOpen}
+            className={`pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-[length:var(--radius-control)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+              drawerOpen
+                ? 'bg-[var(--color-bg-active)] text-[var(--color-text-primary)]'
+                : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)]'
+            }`}
           >
-            {drawerOpen ? '关闭排查' : '排查检索'}
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.5-3.5" strokeLinecap="round" />
+            </svg>
           </button>
         </div>
         <div className="flex min-h-0 flex-1">
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-            {children}
-          </div>
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
           {drawerOpen ? (
             <aside className="flex min-h-0 w-[min(360px,38%)] shrink-0 flex-col overflow-hidden border-l border-[var(--color-border)] bg-[var(--color-surface)]">
               <div className="flex shrink-0 flex-col gap-2 border-b border-[var(--color-border)] p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs font-medium text-[var(--color-text-secondary)]">排查检索</p>
+                  <button
+                    type="button"
+                    onClick={() => setDrawerOpen(false)}
+                    className="rounded-[length:var(--radius-control)] px-2 py-1 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                  >
+                    关闭
+                  </button>
+                </div>
                 <ModeSelector value={mode} onChange={setMode} />
                 <input
                   type="search"

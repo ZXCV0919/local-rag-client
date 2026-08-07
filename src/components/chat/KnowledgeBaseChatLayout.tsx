@@ -1,6 +1,5 @@
 import { Outlet, useParams } from 'react-router-dom';
 import { RetrievalWorkbench } from './RetrievalWorkbench';
-import { KbSectionNav } from '../knowledge-base/KbSectionNav';
 import { notifyConversationsNeedRefresh } from '../layout/KbConversationSidebar';
 
 export function KnowledgeBaseChatLayout() {
@@ -16,7 +15,6 @@ export function KnowledgeBaseChatLayout() {
 
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-      <KbSectionNav kbId={id} active="chat" />
       <RetrievalWorkbench kbId={id} onConversationsNeedRefresh={notifyConversationsNeedRefresh}>
         <Outlet />
       </RetrievalWorkbench>
@@ -29,9 +27,7 @@ export function ChatSessionPlaceholder() {
     <div className="flex min-h-[200px] flex-1 items-center justify-center px-6 text-center text-sm text-[var(--color-text-secondary)]">
       <div className="max-w-sm space-y-2">
         <p className="font-medium text-[var(--color-text-primary)]">选择或新建对话</p>
-        <p className="leading-relaxed">
-          从左侧选一条历史，或点「新对话」后在下方提问。需要核对命中时点「排查检索」。
-        </p>
+        <p className="leading-relaxed">从左侧选一条历史，或点「新对话」后在下方提问。</p>
       </div>
     </div>
   );

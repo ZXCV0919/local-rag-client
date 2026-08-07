@@ -47,7 +47,7 @@ export function ChatHeader({ kbName, model, retrievalMode, chatProvider = 'ollam
         <span className="truncate text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">{model}</span>
       </div>
       <p className="text-[length:var(--text-meta)] leading-relaxed text-[var(--color-text-secondary)]">
-        在下方提问；需要核对命中时点右上角「排查检索」。
+        在下方提问；需要核对命中时点右上角检索图标。
       </p>
     </header>
   );

@@ -5,7 +5,6 @@ import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { useDocument } from '../../hooks/useDocument';
 import { useToastStore } from '../../store/toast';
 import { EmptyState } from '../common/EmptyState';
-import { KbSectionNav } from '../knowledge-base/KbSectionNav';
 import { DocumentCard } from './DocumentCard';
 import { DocumentImporter } from './DocumentImporter';
 import { reprocessDocument } from '../../services/importer';
@@ -88,7 +87,6 @@ export function DocumentList() {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <KbSectionNav kbId={kbId} active="documents" />
       <div className="mx-auto w-full max-w-[min(100%,1680px)] flex-1 overflow-auto p-6">
       <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
         <div className="min-w-0 flex-1">
