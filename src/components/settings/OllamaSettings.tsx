@@ -90,9 +90,9 @@ export function OllamaSettings() {
 
 
 
-      <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm space-y-3">
+      <section className="space-y-3 overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
 
-        <h2 className="font-semibold text-[var(--color-text-primary)]">本地向量化</h2>
+        <h2 className="text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">本地向量化</h2>
 
         <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
 
@@ -146,9 +146,9 @@ export function OllamaSettings() {
 
 
 
-      <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+      <section className="overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
 
-        <h2 className="font-semibold mb-1 text-[var(--color-text-primary)]">嵌入模型</h2>
+        <h2 className="mb-1 text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">嵌入模型</h2>
 
         <p className="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
 
@@ -176,9 +176,9 @@ export function OllamaSettings() {
 
       {chatProvider === 'ollama' ? (
 
-        <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+        <section className="overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
 
-          <h2 className="font-semibold mb-1 text-[var(--color-text-primary)]">本地对话模型</h2>
+          <h2 className="mb-1 text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">本地对话模型</h2>
 
           <p className="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
 
@@ -204,9 +204,9 @@ export function OllamaSettings() {
 
       ) : (
 
-        <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+        <section className="overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
 
-          <h2 className="font-semibold mb-1 text-[var(--color-text-primary)]">云端对话模型</h2>
+          <h2 className="mb-1 text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">云端对话模型</h2>
 
           <OllamaModelList variant="siliconflow" models={[]} connected={false} onRefresh={checkStatus} ollamaUrl={urlDraft} />
 

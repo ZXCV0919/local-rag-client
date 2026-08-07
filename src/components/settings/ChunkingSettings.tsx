@@ -52,10 +52,10 @@ export function ChunkingSettings() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm space-y-5">
+      <section className="space-y-5 overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
         <div>
-          <h2 className="font-semibold text-[var(--color-text-primary)]">分块默认值</h2>
-          <p className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
+          <h2 className="text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">分块默认值</h2>
+          <p className="mt-1 text-[length:var(--text-meta)] leading-relaxed text-[var(--color-text-secondary)]">
             影响<strong className="font-medium text-[var(--color-text-primary)]">新建知识库</strong>
             时的默认策略（已有知识库不受影响）。与文档解析、向量化的分块一致。
           </p>

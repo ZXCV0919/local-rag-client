@@ -80,11 +80,11 @@ export function RetrievalSettings() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm space-y-5">
+      <section className="space-y-5 overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
         <div>
-          <h2 className="font-semibold text-[var(--color-text-primary)]">检索默认</h2>
-          <p className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
-            与对话侧「检索工作台」读取同一套设置（启动时拉取）。α、β 建议之和接近 1。
+          <h2 className="text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">检索默认</h2>
+          <p className="mt-1 text-[length:var(--text-meta)] leading-relaxed text-[var(--color-text-secondary)]">
+            与对话侧「排查检索」读取同一套设置。α、β 建议之和接近 1。
           </p>
         </div>
 
@@ -160,9 +160,9 @@ export function RetrievalSettings() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm space-y-3">
-        <h2 className="font-semibold text-[var(--color-text-primary)]">对话可靠性</h2>
-        <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+      <section className="space-y-3 overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
+        <h2 className="text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">对话可靠性</h2>
+        <p className="text-[length:var(--text-meta)] leading-relaxed text-[var(--color-text-secondary)]">
           每条助手回答在流式结束后会多一次短推理，怀疑未基于引用时在末尾追加提示；额外延迟与算力。
         </p>
         <label className="flex cursor-pointer items-start gap-3 text-sm text-[var(--color-text-primary)]">

@@ -126,7 +126,19 @@ export function ThemeBootstrap() {
         const all = await tauriCommand<Record<string, string>>('get_all_settings');
         if (cancelled) return;
         const scheme = parseColorSchemeStored(all.color_scheme);
-        const hex = parseAccentStored(all.accent_color);
+        let hex = parseAccentStored(all.accent_color);
+        // One-time migrate legacy default indigo → ink-teal product default
+        if (hex.toLowerCase() === '#6366f1') {
+          hex = DEFAULT_SETTINGS.accent_color;
+          try {
+            await tauriCommand('set_setting', {
+              key: 'accent_color',
+              value: JSON.stringify(hex),
+            });
+          } catch {
+            /* keep in-memory default even if persist fails */
+          }
+        }
         setSettings({
           color_scheme: scheme,
           accent_color: hex,

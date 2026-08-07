@@ -82,8 +82,8 @@ export function ChatProviderSettings() {
     if (!trimmed) {
       addToast({
         type: 'error',
-        title: '请输入新的 API Key',
-        message: '密钥仅保存在本地数据库，前端读取时只会看到掩码。',
+        title: '请输入新�?API Key',
+        message: '密钥仅保存在本地数据库，前端读取时只会看到掩码�?,
         duration: 4000,
       });
       return;
@@ -103,8 +103,8 @@ export function ChatProviderSettings() {
       setApiKeyDraft('');
       addToast({
         type: 'success',
-        title: 'API Key 已保存',
-        message: '明文仅存于本地，界面只显示掩码',
+        title: 'API Key 已保�?,
+        message: '明文仅存于本地，界面只显示掩�?,
         duration: 2800,
       });
     } catch (e) {
@@ -125,7 +125,7 @@ export function ChatProviderSettings() {
       await writeSetting('siliconflow_base_url', trimmed);
       setBaseUrlDraft(trimmed);
       setSettings({ siliconflow_base_url: trimmed });
-      addToast({ type: 'success', title: 'Base URL 已保存', duration: 2500 });
+      addToast({ type: 'success', title: 'Base URL 已保�?, duration: 2500 });
     } catch (e) {
       addToast({
         type: 'error',
@@ -144,7 +144,7 @@ export function ChatProviderSettings() {
         await writeSetting('siliconflow_chat_model', trimmed);
         setModelDraft(trimmed);
         setSettings({ siliconflow_chat_model: trimmed });
-        addToast({ type: 'success', title: '云端对话模型已保存', duration: 2500 });
+        addToast({ type: 'success', title: '云端对话模型已保�?, duration: 2500 });
       } catch (e) {
         addToast({
           type: 'error',
@@ -164,7 +164,7 @@ export function ChatProviderSettings() {
     if (!draft && !maskedStored) {
       addToast({
         type: 'error',
-        title: '请先填写并保存 API Key',
+        title: '请先填写并保�?API Key',
         duration: 4000,
       });
       return;
@@ -200,12 +200,12 @@ export function ChatProviderSettings() {
   ]);
 
   return (
-    <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm space-y-4">
+    <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] space-y-4">
       <div>
-        <h2 className="font-semibold text-[var(--color-text-primary)]">对话提供商</h2>
+        <h2 className="font-semibold text-[var(--color-text-primary)]">对话提供�?/h2>
         <p className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
-          检索与向量化始终使用本地 Ollama；仅「生成回答」与可选自检可走云端。硅基流动请求由
-          Rust 代理，API Key 不会出现在前端网络请求里。
+          检索与向量化始终使用本�?Ollama；仅「生成回答」与可选自检可走云端。硅基流动请求由
+          Rust 代理，API Key 不会出现在前端网络请求里�?
         </p>
       </div>
 
@@ -215,18 +215,18 @@ export function ChatProviderSettings() {
         onValueChange={(v) => {
           if (v === 'ollama' || v === 'siliconflow') void persistProvider(v);
         }}
-        className="inline-flex rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-0.5 gap-0.5"
-        aria-label="对话提供商"
+        className="inline-flex rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-0.5 gap-0.5"
+        aria-label="对话提供�?
       >
         <ToggleGroup.Item
           value="ollama"
-          className="px-4 py-2 text-sm font-medium rounded-md text-[var(--color-text-secondary)] data-[state=on]:bg-[var(--color-surface)] data-[state=on]:text-[var(--color-text-primary)] data-[state=on]:shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+          className="px-4 py-2 text-sm font-medium rounded-[length:var(--radius-control)] text-[var(--color-text-secondary)] data-[state=on]:bg-[var(--color-surface)] data-[state=on]:text-[var(--color-text-primary)] data-[state=on]:shadow-[var(--shadow-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
         >
           本地 Ollama
         </ToggleGroup.Item>
         <ToggleGroup.Item
           value="siliconflow"
-          className="px-4 py-2 text-sm font-medium rounded-md text-[var(--color-text-secondary)] data-[state=on]:bg-[var(--color-surface)] data-[state=on]:text-[var(--color-text-primary)] data-[state=on]:shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+          className="px-4 py-2 text-sm font-medium rounded-[length:var(--radius-control)] text-[var(--color-text-secondary)] data-[state=on]:bg-[var(--color-surface)] data-[state=on]:text-[var(--color-text-primary)] data-[state=on]:shadow-[var(--shadow-sm)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
         >
           硅基流动
         </ToggleGroup.Item>
@@ -234,8 +234,8 @@ export function ChatProviderSettings() {
 
       {provider === 'siliconflow' ? (
         <div className="space-y-4 pt-2 border-t border-[var(--color-border)]">
-          <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed rounded-md border border-[var(--color-border)] bg-[var(--color-bg-secondary)]/40 px-3 py-2">
-            检索到的文档片段将发送至硅基流动用于生成回答。敏感资料库建议继续使用本地 Ollama。
+          <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)]/40 px-3 py-2">
+            检索到的文档片段将发送至硅基流动用于生成回答。敏感资料库建议继续使用本地 Ollama�?
           </p>
 
           <label className="block text-xs">
@@ -244,7 +244,7 @@ export function ChatProviderSettings() {
               type="password"
               value={apiKeyDraft}
               onChange={(e) => setApiKeyDraft(e.target.value)}
-              placeholder={maskedStored ? '输入新 Key 以更新…' : 'sk-…'}
+              placeholder={maskedStored ? '输入�?Key 以更新�? : 'sk-�?}
               autoComplete="off"
               className="w-full px-3 py-2 text-sm rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             />
@@ -254,7 +254,7 @@ export function ChatProviderSettings() {
               </span>
             ) : (
               <span className="mt-1 block text-[11px] text-[var(--color-text-secondary)]">
-                尚未配置。保存后前端只能读到掩码，完整密钥由后端代理使用。
+                尚未配置。保存后前端只能读到掩码，完整密钥由后端代理使用�?
               </span>
             )}
           </label>
@@ -264,7 +264,7 @@ export function ChatProviderSettings() {
             onClick={() => void persistApiKey()}
             className="px-4 py-2 text-sm rounded-[length:var(--radius-control)] border border-[var(--color-border)] text-[var(--color-text-primary)] hover:bg-[var(--color-btn-ghost-hover)] disabled:opacity-50"
           >
-            {savingKey ? '保存中…' : '保存 API Key'}
+            {savingKey ? '保存中�? : '保存 API Key'}
           </button>
 
           <div>
@@ -273,7 +273,7 @@ export function ChatProviderSettings() {
               onClick={() => setShowAdvanced((v) => !v)}
               className="text-xs text-[var(--color-accent)] hover:underline"
             >
-              {showAdvanced ? '收起高级选项' : '展开高级选项（Base URL）'}
+              {showAdvanced ? '收起高级选项' : '展开高级选项（Base URL�?}
             </button>
             {showAdvanced ? (
               <div className="mt-2 flex flex-wrap gap-2 items-end">
@@ -312,17 +312,17 @@ export function ChatProviderSettings() {
               {SILICONFLOW_CHAT_PRESETS.map((p) => (
                 <option key={p.model} value={p.model}>
                   {p.label}
-                  {p.hint ? ` — ${p.hint}` : ''}
+                  {p.hint ? ` �?${p.hint}` : ''}
                 </option>
               ))}
-              <option value={CUSTOM_MODEL_VALUE}>自定义模型 ID…</option>
+              <option value={CUSTOM_MODEL_VALUE}>自定义模�?ID�?/option>
             </select>
           </label>
 
           {presetSelectValue === CUSTOM_MODEL_VALUE ? (
             <div className="flex flex-wrap gap-2 items-end">
               <label className="flex-1 min-w-[12rem] text-xs">
-                <span className="block mb-1 text-[var(--color-text-secondary)]">自定义 model id</span>
+                <span className="block mb-1 text-[var(--color-text-secondary)]">自定�?model id</span>
                 <input
                   value={modelDraft}
                   onChange={(e) => setModelDraft(e.target.value)}
@@ -350,7 +350,7 @@ export function ChatProviderSettings() {
             onClick={() => void runTest()}
             className="px-4 py-2 text-sm rounded-[length:var(--radius-control)] bg-[var(--color-accent)] text-[var(--color-on-accent)] hover:bg-[var(--color-btn-ghost-hover)] disabled:opacity-50"
           >
-            {testing ? '测试中…' : '测试连接'}
+            {testing ? '测试中�? : '测试连接'}
           </button>
         </div>
       ) : null}

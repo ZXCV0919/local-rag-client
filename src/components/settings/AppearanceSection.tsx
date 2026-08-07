@@ -7,11 +7,17 @@ import {
   applyColorSchemePreference,
   resolveColorScheme,
 } from '../../utils/color-scheme';
+import {
+  SettingsPanel,
+  SettingsRow,
+  settingsControlClass,
+  settingsSecondaryBtnClass,
+} from './SettingsPanel';
 
-const SCHEME_OPTIONS: { value: ColorSchemePreference; label: string }[] = [
-  { value: 'system', label: '系统' },
-  { value: 'light', label: '浅色' },
-  { value: 'dark', label: '深色' },
+const SCHEME_OPTIONS: { value: ColorSchemePreference; label: string; hint: string }[] = [
+  { value: 'system', label: '系统', hint: '跟随 OS' },
+  { value: 'light', label: '浅色', hint: '纸感工作台' },
+  { value: 'dark', label: '深色', hint: '低光环境' },
 ];
 
 export function AppearanceSection() {
@@ -40,108 +46,110 @@ export function AppearanceSection() {
 
   const resolvedLabel =
     colorScheme === 'system'
-      ? `系统 (${resolveColorScheme('system') === 'dark' ? '深色' : '浅色'})`
+      ? `系统（当前 ${resolveColorScheme('system') === 'dark' ? '深色' : '浅色'}）`
       : SCHEME_OPTIONS.find((o) => o.value === colorScheme)?.label ?? colorScheme;
 
   return (
-    <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] space-y-8">
-      <div>
-        <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">外观</h2>
-        <p className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
-          配色方案控制窗口背景与文字颜色；主题色用于按钮与强调。切换明暗时会整套更新语义色，避免出现背景变了字还跟不上的情况。
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-        <div className="min-w-0 flex-1 space-y-1">
-          <div className="text-sm font-medium text-[var(--color-text-primary)]">配色方案</div>
-          <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            选择应用跟随系统、浅色或深色界面。当前生效：
-            <span className="text-[var(--color-text-primary)] font-medium ml-1">{resolvedLabel}</span>
-          </p>
-        </div>
-        <label className="shrink-0 sm:w-52">
-          <span className="sr-only">配色方案</span>
-          <select
-            value={colorScheme}
-            onChange={(e) => void commitScheme(e.target.value as ColorSchemePreference)}
-            className="w-full rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-2 text-sm text-[var(--color-text-primary)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+    <div className="space-y-5">
+      <SettingsPanel
+        title="外观"
+        description="配色方案控制窗口背景与文字；主题色用于主按钮、引用与强调元素。"
+      >
+        <SettingsRow label="配色方案" hint={`当前生效：${resolvedLabel}`}>
+          <div
+            className="inline-flex rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-1"
+            role="group"
+            aria-label="配色方案"
           >
-            {SCHEME_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <div className="border-t border-[var(--color-border)] pt-8 space-y-4">
-        <div>
-          <div className="text-sm font-medium text-[var(--color-text-primary)]">主题色</div>
-          <p className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
-            自定义强调色与主按钮颜色。系统会根据亮度自动选择按钮上的文字颜色（含 hover），尽量避免看不清字。
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {ACCENT_PRESETS.map((p) => (
-            <button
-              key={p.hex}
-              type="button"
-              title={p.hex}
-              onClick={() => void commitAccent(p.hex)}
-              className={`rounded-[length:var(--radius-control)] border px-3 py-2 text-[length:var(--text-meta)] transition-colors ${
-                accent.toLowerCase() === p.hex.toLowerCase()
-                  ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/30'
-                  : 'border-[var(--color-border)] hover:border-[var(--color-text-secondary)]'
-              }`}
-            >
-              <span
-                className="inline-block w-3 h-3 rounded-full mr-1.5 align-middle border border-[var(--color-border-dark)]"
-                style={{ backgroundColor: p.hex }}
-              />
-              {p.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="flex items-center gap-2 text-sm text-[var(--color-text-primary)]">
-            <span className="text-[var(--color-text-secondary)] shrink-0">自定义</span>
-            <input
-              type="color"
-              value={normalizeHex(accent) ?? DEFAULT_SETTINGS.accent_color}
-              onChange={(e) => void commitAccent(e.target.value)}
-              className="h-10 w-14 cursor-pointer rounded border border-[var(--color-border)] bg-[var(--color-surface)] p-1"
-              aria-label="选择主题色"
-            />
-            <code className="text-xs text-[var(--color-text-secondary)] font-mono">
-              {normalizeHex(accent) ?? DEFAULT_SETTINGS.accent_color}
-            </code>
-          </label>
-          <button
-            type="button"
-            onClick={() => void commitAccent(DEFAULT_SETTINGS.accent_color)}
-            className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] px-3 py-2 text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-btn-ghost-hover)]"
-          >
-            恢复默认色
-          </button>
-        </div>
-
-        <div className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4 space-y-2">
-          <p className="text-xs font-medium text-[var(--color-text-primary)]">预览</p>
-          <div className="flex flex-wrap gap-2 items-center">
-            <button
-              type="button"
-              className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2 text-sm text-[var(--color-on-accent)] hover:bg-[var(--color-accent-hover)]"
-            >
-              主按钮
-            </button>
-            <span className="text-sm text-[var(--color-accent)] underline cursor-default">链接样式</span>
+            {SCHEME_OPTIONS.map((o) => {
+              const active = colorScheme === o.value;
+              return (
+                <button
+                  key={o.value}
+                  type="button"
+                  onClick={() => void commitScheme(o.value)}
+                  className={
+                    active
+                      ? 'min-w-[4.5rem] rounded-[calc(var(--radius-control)-2px)] bg-[var(--color-surface)] px-3 py-2 text-center shadow-[var(--shadow-sm)] ring-1 ring-[color-mix(in_srgb,var(--color-accent)_25%,var(--color-border))]'
+                      : 'min-w-[4.5rem] rounded-[calc(var(--radius-control)-2px)] px-3 py-2 text-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  }
+                >
+                  <span className="block text-sm font-semibold text-[var(--color-text-primary)]">{o.label}</span>
+                  <span className="mt-0.5 block text-[10px] text-[var(--color-text-secondary)]">{o.hint}</span>
+                </button>
+              );
+            })}
           </div>
-        </div>
-      </div>
-    </section>
+        </SettingsRow>
+
+        <SettingsRow label="主题色" hint="用于按钮、链接与引用高亮。系统会按亮度自动选择按钮文字色。">
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              {ACCENT_PRESETS.map((p) => {
+                const selected = accent.toLowerCase() === p.hex.toLowerCase();
+                return (
+                  <button
+                    key={p.hex}
+                    type="button"
+                    title={p.hex}
+                    onClick={() => void commitAccent(p.hex)}
+                    className={
+                      selected
+                        ? 'inline-flex items-center gap-2 rounded-[length:var(--radius-control)] border border-[var(--color-accent)] bg-[var(--color-surface)] px-3 py-2 text-[length:var(--text-meta)] font-medium ring-2 ring-[color-mix(in_srgb,var(--color-accent)_28%,transparent)]'
+                        : 'inline-flex items-center gap-2 rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-[length:var(--text-meta)] hover:border-[var(--color-text-secondary)]'
+                    }
+                  >
+                    <span
+                      className="inline-block h-3.5 w-3.5 rounded-full border border-[var(--color-border-dark)]"
+                      style={{ backgroundColor: p.hex }}
+                    />
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="flex items-center gap-2 text-sm text-[var(--color-text-primary)]">
+                <span className="shrink-0 text-[var(--color-text-secondary)]">自定义</span>
+                <input
+                  type="color"
+                  value={normalizeHex(accent) ?? DEFAULT_SETTINGS.accent_color}
+                  onChange={(e) => void commitAccent(e.target.value)}
+                  className="h-10 w-14 cursor-pointer rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] p-1"
+                  aria-label="选择主题色"
+                />
+                <code className={`${settingsControlClass} !w-auto font-mono text-xs`}>
+                  {normalizeHex(accent) ?? DEFAULT_SETTINGS.accent_color}
+                </code>
+              </label>
+              <button
+                type="button"
+                onClick={() => void commitAccent(DEFAULT_SETTINGS.accent_color)}
+                className={settingsSecondaryBtnClass}
+              >
+                恢复默认色
+              </button>
+            </div>
+
+            <div className="rounded-[length:var(--radius-control)] border border-dashed border-[var(--color-border)] bg-[var(--color-muted-bg)] px-4 py-3">
+              <p className="text-[length:var(--text-meta)] font-medium text-[var(--color-text-secondary)]">预览</p>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-[var(--color-on-accent)]"
+                >
+                  主按钮
+                </button>
+                <span className="text-sm font-medium text-[var(--color-accent)]">链接样式</span>
+                <span className="rounded-full bg-[var(--color-citation-bg)] px-2.5 py-0.5 text-[length:var(--text-meta)] text-[var(--color-citation-fg)]">
+                  引用 pill
+                </span>
+              </div>
+            </div>
+          </div>
+        </SettingsRow>
+      </SettingsPanel>
+    </div>
   );
 }
