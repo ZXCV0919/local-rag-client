@@ -1,5 +1,6 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { BrandMark } from '../brand/BrandMark';
+import { useSourcesPanelContext } from '../../context/SourcesPanelContext';
 
 async function safeWindowOp(fn: () => Promise<void>): Promise<void> {
   try {
@@ -11,11 +12,38 @@ async function safeWindowOp(fn: () => Promise<void>): Promise<void> {
   }
 }
 
-function WindowControls() {
-  const baseBtn =
-    'inline-flex h-full w-11 shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--color-text-sidebar-dim)] outline-none transition-colors duration-150 ' +
-    'hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-sidebar)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]';
+const titlebarBtn =
+  'inline-flex h-full w-11 shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--color-text-sidebar-dim)] outline-none transition-colors duration-150 ' +
+  'hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-sidebar)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]';
 
+function SourcesPanelToggle() {
+  const { open, toggle } = useSourcesPanelContext();
+
+  return (
+    <button
+      type="button"
+      data-tauri-no-drag
+      className={titlebarBtn}
+      aria-pressed={open}
+      aria-label={open ? '关闭资料面板' : '打开资料面板'}
+      onClick={toggle}
+    >
+      <svg
+        className="h-3.5 w-3.5 shrink-0"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        aria-hidden
+      >
+        <rect x="1.5" y="2.5" width="13" height="11" rx="1" />
+        <path d="M11 2.5v11" strokeLinecap="square" />
+      </svg>
+    </button>
+  );
+}
+
+function WindowControls() {
   return (
     <div
       data-tauri-no-drag
@@ -25,7 +53,7 @@ function WindowControls() {
     >
       <button
         type="button"
-        className={baseBtn}
+        className={titlebarBtn}
         aria-label="最小化"
         onClick={() => void safeWindowOp(() => getCurrentWindow().minimize())}
       >
@@ -35,7 +63,7 @@ function WindowControls() {
       </button>
       <button
         type="button"
-        className={baseBtn}
+        className={titlebarBtn}
         aria-label="最大化或还原"
         onClick={() => void safeWindowOp(() => getCurrentWindow().toggleMaximize())}
       >
@@ -46,7 +74,7 @@ function WindowControls() {
       <button
         type="button"
         className={
-          baseBtn +
+          titlebarBtn +
           ' hover:!bg-[#e81123] hover:!text-white focus-visible:!ring-[#e81123] dark:hover:!bg-[#e81123]'
         }
         aria-label="关闭"
@@ -86,6 +114,7 @@ export function Titlebar() {
           </div>
         </div>
       </div>
+      <SourcesPanelToggle />
       <WindowControls />
     </div>
   );

@@ -7,29 +7,33 @@ import { Sidebar } from './Sidebar';
 import { ThemeBootstrap } from '../settings/ThemeBootstrap';
 import { NavigationGuardDialog } from './NavigationGuardDialog';
 import { DependencyHealthBanner } from '../common/DependencyHealthBanner';
+import { SourcesPanelProvider } from '../../context/SourcesPanelContext';
+import { WorkbenchShell } from './WorkbenchShell';
 
 export function AppLayout() {
   return (
-    <div className="flex flex-col h-screen bg-[var(--color-bg-primary)]">
-      <ThemeBootstrap />
-      <NavigationGuardDialog />
-      <ToastHost />
-      <GlobalShortcuts />
-      <Titlebar />
-      <DependencyHealthBanner />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main
-          className="flex min-w-0 flex-1 flex-col overflow-y-auto"
-          style={{ background: 'var(--gradient-page)' }}
-        >
-          <ErrorBoundary>
-            <div className="flex min-h-0 flex-1 flex-col">
-              <Outlet />
-            </div>
-          </ErrorBoundary>
-        </main>
+    <SourcesPanelProvider>
+      <div className="flex flex-col h-screen bg-[var(--color-bg-primary)]">
+        <ThemeBootstrap />
+        <NavigationGuardDialog />
+        <ToastHost />
+        <GlobalShortcuts />
+        <Titlebar />
+        <DependencyHealthBanner />
+        <div className="flex flex-1 overflow-hidden">
+          <Sidebar />
+          <main
+            className="flex min-w-0 flex-1 overflow-hidden"
+            style={{ background: 'var(--gradient-page)' }}
+          >
+            <ErrorBoundary>
+              <WorkbenchShell>
+                <Outlet />
+              </WorkbenchShell>
+            </ErrorBoundary>
+          </main>
+        </div>
       </div>
-    </div>
+    </SourcesPanelProvider>
   );
 }
