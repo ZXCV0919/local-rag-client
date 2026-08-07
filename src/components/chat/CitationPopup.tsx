@@ -1,5 +1,6 @@
 import * as Popover from '@radix-ui/react-popover';
 import { useEffect, useState, type ReactNode } from 'react';
+import { useSourcesPanelContext } from '../../context/SourcesPanelContext';
 import { useAppNavigate } from '../../hooks/useAppNavigate';
 import { tauriCommand } from '../../hooks/useDatabase';
 import type { ChunkRow } from '../../types/chunk';
@@ -58,6 +59,7 @@ export function CitationPopover({
   children,
 }: CitationPopoverProps) {
   const navigate = useAppNavigate();
+  const { setOpen: setSourcesPanelOpen } = useSourcesPanelContext();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -121,7 +123,11 @@ export function CitationPopover({
               <button
                 type="button"
                 disabled={!chunk}
-                onClick={() => chunk && navigate(`/documents/${chunk.document_id}?chunk=${chunk.id}`)}
+                onClick={() => {
+                  if (!chunk) return;
+                  setSourcesPanelOpen(true);
+                  navigate(`/documents/${chunk.document_id}?chunk=${chunk.id}`);
+                }}
                 className="px-3 py-1.5 text-xs rounded-lg bg-[var(--color-accent)] text-[var(--color-on-accent)] hover:bg-[var(--color-accent-hover)] disabled:opacity-40"
               >
                 查看原文
