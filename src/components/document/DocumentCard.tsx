@@ -61,7 +61,7 @@ export function DocumentCard({
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-3">
           <span
-            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[length:var(--radius-control)] text-xs font-bold"
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[length:var(--radius-control)] text-[length:var(--text-meta)] font-bold"
             style={{ background: iconStyle.bg, color: iconStyle.fg }}
           >
             {iconStyle.label}
@@ -71,7 +71,7 @@ export function DocumentCard({
             <div className="text-xs text-[var(--color-text-secondary)] truncate">{doc.file_name}</div>
           </div>
         </div>
-        <StatusBadge status={doc.status} />
+        <StatusBadge status={doc.status} className="text-[length:var(--text-meta)]" />
       </div>
 
       <div className="text-xs text-[var(--color-text-secondary)] flex gap-4">
@@ -90,7 +90,7 @@ export function DocumentCard({
                     i <= currentStepIdx ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-muted-bg)]'
                   }`}
                 />
-                <span className="text-[9px] text-[var(--color-text-secondary)]">{label}</span>
+                <span className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">{label}</span>
               </div>
             ))}
           </div>

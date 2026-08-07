@@ -101,7 +101,7 @@ export function KnowledgeBaseCard({ knowledgeBase: kb, stats }: KnowledgeBaseCar
                   return (
                     <span
                       key={ft}
-                      className="rounded px-1.5 py-0.5 text-[9px] font-bold leading-none"
+                      className="rounded px-1.5 py-0.5 text-[length:var(--text-meta)] font-bold leading-none"
                       style={{ background: badge.bg, color: badge.fg }}
                     >
                       {badge.label}

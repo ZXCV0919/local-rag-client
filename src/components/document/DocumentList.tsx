@@ -92,8 +92,8 @@ export function DocumentList() {
       <div className="mx-auto w-full max-w-[min(100%,1680px)] flex-1 overflow-auto p-6">
       <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-bold">文档管理</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
+          <h1 className="text-[length:var(--text-section)] font-bold text-[var(--color-text-primary)]">文档管理</h1>
+          <p className="mt-1 text-[length:var(--text-body)] text-[var(--color-text-secondary)]">
             导入后自动解析、分块、向量化并写入 ChromaDB；完成后状态为「就绪」。
           </p>
         </div>

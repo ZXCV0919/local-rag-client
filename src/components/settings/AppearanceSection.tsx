@@ -44,7 +44,7 @@ export function AppearanceSection() {
       : SCHEME_OPTIONS.find((o) => o.value === colorScheme)?.label ?? colorScheme;
 
   return (
-    <section className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm space-y-8">
+    <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] space-y-8">
       <div>
         <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">外观</h2>
         <p className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
@@ -65,7 +65,7 @@ export function AppearanceSection() {
           <select
             value={colorScheme}
             onChange={(e) => void commitScheme(e.target.value as ColorSchemePreference)}
-            className="w-full px-3 py-2 text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            className="w-full rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-2 text-sm text-[var(--color-text-primary)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
             {SCHEME_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>
@@ -91,7 +91,7 @@ export function AppearanceSection() {
               type="button"
               title={p.hex}
               onClick={() => void commitAccent(p.hex)}
-              className={`px-3 py-2 text-xs rounded-lg border transition-colors ${
+              className={`rounded-[length:var(--radius-control)] border px-3 py-2 text-[length:var(--text-meta)] transition-colors ${
                 accent.toLowerCase() === p.hex.toLowerCase()
                   ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/30'
                   : 'border-[var(--color-border)] hover:border-[var(--color-text-secondary)]'
@@ -123,18 +123,18 @@ export function AppearanceSection() {
           <button
             type="button"
             onClick={() => void commitAccent(DEFAULT_SETTINGS.accent_color)}
-            className="text-sm px-3 py-2 rounded border border-[var(--color-border)] hover:bg-[var(--color-btn-ghost-hover)] text-[var(--color-text-primary)]"
+            className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] px-3 py-2 text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-btn-ghost-hover)]"
           >
             恢复默认色
           </button>
         </div>
 
-        <div className="rounded-lg border border-[var(--color-border)] p-4 bg-[var(--color-bg-secondary)] space-y-2">
+        <div className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4 space-y-2">
           <p className="text-xs font-medium text-[var(--color-text-primary)]">预览</p>
           <div className="flex flex-wrap gap-2 items-center">
             <button
               type="button"
-              className="px-4 py-2 text-sm rounded-lg bg-[var(--color-accent)] text-[var(--color-on-accent)] hover:bg-[var(--color-accent-hover)]"
+              className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2 text-sm text-[var(--color-on-accent)] hover:bg-[var(--color-accent-hover)]"
             >
               主按钮
             </button>
