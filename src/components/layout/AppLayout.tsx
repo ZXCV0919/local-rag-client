@@ -3,7 +3,7 @@ import { ToastHost } from '../common/ToastHost';
 import { ErrorBoundary } from '../../hooks/useErrorBoundary';
 import { GlobalShortcuts } from './GlobalShortcuts';
 import { Titlebar } from './Titlebar';
-import { Sidebar } from './Sidebar';
+import { KbConversationSidebar } from './KbConversationSidebar';
 import { ThemeBootstrap } from '../settings/ThemeBootstrap';
 import { NavigationGuardDialog } from './NavigationGuardDialog';
 import { DependencyHealthBanner } from '../common/DependencyHealthBanner';
@@ -21,7 +21,7 @@ export function AppLayout() {
         <Titlebar />
         <DependencyHealthBanner />
         <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
+          <KbConversationSidebar />
           <main
             className="flex min-w-0 flex-1 overflow-hidden"
             style={{ background: 'var(--gradient-page)' }}
