@@ -37,3 +37,5 @@ src-tauri/target
 # Build artifacts & large media (not for git)
 release/
 功能演示视频/
+
+.worktrees/
