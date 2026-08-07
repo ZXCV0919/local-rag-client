@@ -73,7 +73,7 @@ export function DataManager() {
       try {
         setDataPath(await appDataDir());
       } catch {
-        setDataPath('�?);
+        setDataPath('—');
       }
     })();
   }, []);
@@ -126,7 +126,7 @@ export function DataManager() {
 
   const exportKb = async () => {
     if (!exportKbId) {
-      addToast({ type: 'warning', title: '请选择知识�?, duration: 3000 });
+      addToast({ type: 'warning', title: '请选择知识库', duration: 3000 });
       return;
     }
     const kb = knowledgeBases.find((k) => k.id === exportKbId);
@@ -161,7 +161,7 @@ export function DataManager() {
       setExportKbId('');
       await refreshStats();
       await refreshChroma();
-      addToast({ type: 'success', title: '已清空应用数�?, duration: 4000 });
+      addToast({ type: 'success', title: '已清空应用数据', duration: 4000 });
       setClearOpen(false);
     } catch (e) {
       addToast({
@@ -176,16 +176,11 @@ export function DataManager() {
   };
 
   const openExplorer = async () => {
-    if (!dataPath || dataPath === '�?) return;
+    if (!dataPath || dataPath === '—') return;
     try {
       await openPath(dataPath);
-    } catch (e) {
-      addToast({
-        type: 'error',
-        title: '无法打开目录',
-        message: e instanceof Error ? e.message : String(e),
-        duration: 6000,
-      });
+    } catch {
+      addToast({ type: 'error', title: '无法打开目录' });
     }
   };
 
@@ -199,7 +194,7 @@ export function DataManager() {
         <button
           type="button"
           onClick={() => void openExplorer()}
-          disabled={!dataPath || dataPath === '�?}
+          disabled={!dataPath || dataPath === '—'}
           className="px-4 py-2 text-sm rounded-[length:var(--radius-control)] border border-[var(--color-border)] hover:bg-[var(--color-btn-ghost-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
         >
           在资源管理器中打开
@@ -214,10 +209,10 @@ export function DataManager() {
               知识库：<strong className="text-[var(--color-text-primary)]">{stats.knowledgeBaseCount}</strong>
             </li>
             <li>
-              文档�?strong className="text-[var(--color-text-primary)]">{stats.documentCount}</strong>
+              文档：<strong className="text-[var(--color-text-primary)]">{stats.documentCount}</strong>
             </li>
             <li>
-              分块�?strong className="text-[var(--color-text-primary)]">{stats.chunkCount}</strong>
+              分块：<strong className="text-[var(--color-text-primary)]">{stats.chunkCount}</strong>
             </li>
             <li>
               ChromaDB 持久化约占：
@@ -237,11 +232,11 @@ export function DataManager() {
       </section>
 
       <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)] space-y-3">
-        <h2 className="font-semibold text-[var(--color-text-primary)]">导出知识�?/h2>
-        <p className="text-xs text-[var(--color-text-secondary)]">导出元数据、文档与分块正文，不含向量�?/p>
+        <h2 className="font-semibold text-[var(--color-text-primary)]">导出知识库</h2>
+        <p className="text-xs text-[var(--color-text-secondary)]">导出元数据、文档与分块正文，不含向量。</p>
         <div className="flex flex-wrap gap-2 items-end">
           <label className="text-xs flex-1 min-w-[10rem]">
-            <span className="block mb-1 text-[var(--color-text-secondary)]">知识�?/span>
+            <span className="block mb-1 text-[var(--color-text-secondary)]">知识库</span>
             <select
               value={exportKbId}
               onChange={(e) => setExportKbId(e.target.value)}
@@ -264,7 +259,7 @@ export function DataManager() {
             onClick={() => void exportKb()}
             className="px-4 py-2 text-sm rounded bg-[var(--color-accent)] text-[var(--color-on-accent)] disabled:opacity-50 hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
-            {exportBusy ? '导出中�? : '导出�?JSON'}
+            {exportBusy ? '导出中…' : '导出为 JSON'}
           </button>
         </div>
       </section>
@@ -274,8 +269,8 @@ export function DataManager() {
           <div>
             <h2 className="font-semibold text-[var(--color-text-primary)]">ChromaDB</h2>
             <p className="text-xs text-[var(--color-text-secondary)] mt-1">
-              {health?.responding ? '心跳正常' : '未响应或未启�?} ·{' '}
-              {health?.status.url ? health.status.url : '�?}
+              {health?.responding ? '心跳正常' : '未响应或未启动'} ·{' '}
+              {health?.status.url ? health.status.url : '—'}
             </p>
             {health?.status.last_error ? (
               <p className="text-xs mt-2 text-[var(--color-danger-text)]">{health.status.last_error}</p>
@@ -288,7 +283,7 @@ export function DataManager() {
               disabled={chromBusy}
               className="px-4 py-2 text-sm rounded border border-[var(--color-border)] hover:bg-[var(--color-btn-ghost-hover)] disabled:opacity-50"
             >
-              刷新状�?
+              刷新状态
             </button>
             <button
               type="button"
@@ -313,31 +308,31 @@ export function DataManager() {
           <code className="bg-[var(--color-code-bg)] px-1 rounded">chromadb</code>
           。若心跳失败：先点「启动」再「刷新状态」；端口占用或未安装时，对照{' '}
           <code className="bg-[var(--color-code-bg)] px-1 rounded">docs/ops/troubleshooting.md</code>{' '}
-          �?3 条排查�?
+          第 3 条排查。
         </p>
       </section>
 
       <section className="rounded-[length:var(--radius-card)] border border-[var(--color-danger-border)] bg-[color-mix(in_srgb,var(--badge-error-bg)_35%,var(--color-surface))] p-5 shadow-[var(--shadow-sm)] space-y-3">
         <h2 className="font-semibold text-[var(--color-danger-text)]">危险区域</h2>
         <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-          清空将删�?strong className="text-[var(--color-text-primary)]">所�?/strong>
-          知识库、文档、分块与对话；向量集合会一并清理�?
-          <strong className="text-[var(--color-text-primary)]">设置项保�?/strong>�?
+          清空将删除<strong className="text-[var(--color-text-primary)]">所有</strong>
+          知识库、文档、分块与对话；向量集合会一并清理。
+          <strong className="text-[var(--color-text-primary)]">设置项保留</strong>。
         </p>
         <button
           type="button"
           onClick={() => setClearOpen(true)}
           className="px-4 py-2 text-sm rounded bg-red-600 hover:bg-red-700 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800"
         >
-          清空所有数�?
+          清空所有数据
         </button>
       </section>
 
       <ConfirmDialog
         open={clearOpen}
         onOpenChange={setClearOpen}
-        title="确定清空全部数据�?
-        description="此操作不可撤销。所有知识内容与对话都会被删除�?
+        title="确定清空全部数据？"
+        description="此操作不可撤销。所有知识内容与对话都会被删除。"
         confirmLabel="立即清空"
         danger
         loading={clearBusy}
