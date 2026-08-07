@@ -1,4 +1,5 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
+import { BrandMark } from '../brand/BrandMark';
 
 async function safeWindowOp(fn: () => Promise<void>): Promise<void> {
   try {
@@ -74,7 +75,14 @@ export function Titlebar() {
           e.preventDefault();
           void safeWindowOp(() => getCurrentWindow().toggleMaximize());
         }}
-      />
+      >
+        <div className="pointer-events-none flex items-center gap-2">
+          <BrandMark size={18} />
+          <span className="text-xs font-semibold tracking-tight text-[var(--color-text-sidebar)]">
+            本地知识库
+          </span>
+        </div>
+      </div>
       <WindowControls />
     </div>
   );
