@@ -97,11 +97,16 @@ export function KnowledgeBaseList() {
 
   return (
     <div className="page-enter flex h-full min-h-0 w-full flex-col px-6 py-6 lg:px-8 xl:px-10">
-      <div className="mb-6 flex shrink-0 flex-wrap items-start justify-between gap-4">
+      <div className="mb-8 flex shrink-0 flex-wrap items-end justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h1 className="text-[length:var(--text-page-title)] font-bold text-[var(--color-text-primary)]">我的知识库</h1>
-          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-[var(--color-text-secondary)]">
-            本地导入文档，检索后引用回答。
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
+            Workspace
+          </p>
+          <h1 className="mt-1 text-[length:var(--text-page-title)] font-bold tracking-tight text-[var(--color-text-primary)]">
+            我的知识库
+          </h1>
+          <p className="mt-2 max-w-xl text-[length:var(--text-body)] leading-relaxed text-[var(--color-text-secondary)]">
+            本地导入文档，混合检索后带引用回答——数据不出本机。
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
@@ -118,7 +123,7 @@ export function KnowledgeBaseList() {
           <button
             type="button"
             onClick={() => setShowCreate(true)}
-            className="inline-flex items-center gap-1.5 rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2.5 text-sm font-medium text-[var(--color-on-accent)] shadow-[var(--shadow-sm)] transition-colors duration-150 hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            className="inline-flex items-center gap-1.5 rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-5 py-3 text-sm font-semibold text-[var(--color-on-accent)] shadow-[var(--shadow-sm)] transition-colors duration-150 hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
               <line x1="12" y1="5" x2="12" y2="19" />

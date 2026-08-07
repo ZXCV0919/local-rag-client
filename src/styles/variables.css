@@ -2,20 +2,23 @@
   --color-accent: #0f766e;
   --color-accent-hover: #0d9488;
   --color-on-accent: #ffffff;
-  --sidebar-width: 248px;
-  --titlebar-height: 38px;
+  --sidebar-width: 272px;
+  --titlebar-height: 44px;
   /* Typography scale */
-  --text-page-title: 1.5rem;
-  --text-section: 1.0625rem;
-  --text-body: 0.875rem;
+  --text-page-title: 1.875rem;
+  --text-section: 1.125rem;
+  --text-body: 0.9375rem;
   --text-meta: 0.75rem;
   /* Card / panel vs controls — consumed as rounded-[length:var(--radius-*)] */
-  --radius-card: 12px;
-  --radius-control: 8px;
-  --shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-text-primary) 6%, transparent);
+  --radius-card: 14px;
+  --radius-control: 10px;
+  --shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-text-primary) 7%, transparent);
   --shadow-float:
-    0 10px 40px -12px color-mix(in srgb, var(--color-text-primary) 14%, transparent),
-    0 4px 16px -6px color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+    0 18px 48px -18px color-mix(in srgb, var(--color-text-primary) 18%, transparent),
+    0 6px 18px -8px color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+  --shadow-hero:
+    0 24px 60px -28px color-mix(in srgb, var(--color-accent) 28%, transparent),
+    0 8px 24px -12px color-mix(in srgb, var(--color-text-primary) 10%, transparent);
   --font-sans:
     'Plus Jakarta Sans', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono:
@@ -28,28 +31,28 @@
 /* 未设置 data-theme 时与浅色一致（main.tsx 会尽早写入 data-theme） */
 :root:not([data-theme]),
 :root[data-theme='light'] {
-  --color-bg-primary: #f7f6f3;
-  --color-bg-secondary: #efece6;
+  --color-bg-primary: #f0ebe3;
+  --color-bg-secondary: #e5ddd2;
   --color-surface: #fffcf8;
-  --color-bg-sidebar: #1c2422;
-  --color-bg-hover: #2a3532;
-  --color-bg-active: #33403c;
-  --color-text-primary: #18181b;
-  --color-text-secondary: #71717a;
-  --color-text-sidebar: #e8e6e1;
-  --color-text-sidebar-dim: #a8b0ad;
-  --color-border: #e7e2d9;
-  --color-border-dark: #d6d0c6;
-  --color-border-sidebar: #2a3532;
-  --color-muted-bg: #efece6;
+  --color-bg-sidebar: #121a18;
+  --color-bg-hover: #1e2a27;
+  --color-bg-active: #273632;
+  --color-text-primary: #14201c;
+  --color-text-secondary: #5c6b64;
+  --color-text-sidebar: #f2f0eb;
+  --color-text-sidebar-dim: #9aa8a2;
+  --color-border: #ddd4c8;
+  --color-border-dark: #c9bdb0;
+  --color-border-sidebar: #24302c;
+  --color-muted-bg: #ebe4da;
   --color-user-bubble-bg: #0f766e;
   --color-user-bubble-fg: #ffffff;
   --color-sidebar-icon-bg: #0f766e;
   --color-sidebar-icon-fg: #ffffff;
-  --color-code-bg: #f1f3f5;
-  --color-code-block-bg: #18181b;
+  --color-code-bg: #ebe4da;
+  --color-code-block-bg: #14201c;
   --color-code-block-fg: #e4e4e7;
-  --color-btn-ghost-hover: #efece6;
+  --color-btn-ghost-hover: #ebe4da;
   --color-danger-text: #b91c1c;
   --color-danger-border: #fecaca;
   --color-danger-hover-bg: #fef2f2;
@@ -65,7 +68,11 @@
   --color-citation-fg: var(--color-accent);
   --color-citation-border: color-mix(in srgb, var(--color-accent) 35%, transparent);
   --color-citation-hover-bg: color-mix(in srgb, var(--color-accent) 18%, transparent);
-  --gradient-page: linear-gradient(180deg, #f7f6f3 0%, #f3f1ec 100%);
+  --color-bg-gradient-mid: rgba(15, 118, 110, 0.09);
+  --gradient-page:
+    radial-gradient(ellipse 120% 70% at 12% -10%, var(--color-bg-gradient-mid), transparent 55%),
+    radial-gradient(ellipse 90% 55% at 100% 0%, rgba(180, 83, 9, 0.06), transparent 48%),
+    linear-gradient(180deg, #f4efe7 0%, #ebe4da 100%);
 }
 
 :root[data-theme='dark'] {

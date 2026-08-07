@@ -13,8 +13,8 @@ async function safeWindowOp(fn: () => Promise<void>): Promise<void> {
 
 function WindowControls() {
   const baseBtn =
-    'inline-flex h-full w-11 shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--color-text-secondary)] outline-none transition-colors duration-150 ' +
-    'hover:bg-[var(--color-btn-ghost-hover)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]';
+    'inline-flex h-full w-11 shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--color-text-sidebar-dim)] outline-none transition-colors duration-150 ' +
+    'hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-sidebar)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]';
 
   return (
     <div
@@ -62,11 +62,11 @@ function WindowControls() {
 
 export function Titlebar() {
   return (
-    <div className="relative flex h-[38px] min-h-[38px] items-stretch select-none border-b border-[var(--color-border-sidebar)] bg-[var(--color-bg-sidebar)] transition-colors duration-150">
+    <div className="relative flex h-[var(--titlebar-height)] min-h-[var(--titlebar-height)] items-stretch select-none border-b border-[var(--color-border-sidebar)] bg-[var(--color-bg-sidebar)] transition-colors duration-150">
       {/* One continuous strip (split regions often break dragging on Windows / WebView2) */}
       <div
         data-tauri-drag-region
-        className="flex min-w-0 flex-1 cursor-default items-center overflow-hidden pl-3"
+        className="flex min-w-0 flex-1 cursor-default items-center overflow-hidden pl-4"
         aria-label="拖拽可移动窗口；双击最大化或还原"
         onDoubleClick={(e) => {
           const t = e.target as HTMLElement | null;
@@ -76,11 +76,14 @@ export function Titlebar() {
           void safeWindowOp(() => getCurrentWindow().toggleMaximize());
         }}
       >
-        <div className="pointer-events-none flex items-center gap-2">
-          <BrandMark size={18} />
-          <span className="text-xs font-semibold tracking-tight text-[var(--color-text-sidebar)]">
-            本地知识库
-          </span>
+        <div className="pointer-events-none flex items-center gap-2.5">
+          <BrandMark size={22} />
+          <div className="flex flex-col leading-none">
+            <span className="text-[13px] font-semibold tracking-tight text-[var(--color-text-sidebar)]">
+              本地知识库
+            </span>
+            <span className="mt-0.5 text-[10px] text-[var(--color-text-sidebar-dim)]">Local RAG Workbench</span>
+          </div>
         </div>
       </div>
       <WindowControls />

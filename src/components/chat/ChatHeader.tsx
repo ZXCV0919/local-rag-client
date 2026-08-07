@@ -30,12 +30,12 @@ export function ChatHeader({ kbName, model, retrievalMode, chatProvider = 'ollam
   const badge = PROVIDER_BADGE[chatProvider];
 
   return (
-    <header className="flex shrink-0 flex-col gap-1 border-b border-[var(--color-border)] pb-3">
+    <header className="flex shrink-0 flex-col gap-1.5 pb-4">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <h2 className="text-[length:var(--text-section)] font-semibold text-[var(--color-text-primary)] truncate">
+        <h2 className="truncate text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--color-text-primary)]">
           {kbName}
         </h2>
-        <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-0.5 text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">
+        <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-muted-bg)] px-2.5 py-0.5 text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">
           {MODE_LABELS[retrievalMode]}
         </span>
         <span
@@ -44,10 +44,10 @@ export function ChatHeader({ kbName, model, retrievalMode, chatProvider = 'ollam
         >
           {badge.label}
         </span>
-        <span className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)] truncate">{model}</span>
+        <span className="truncate text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">{model}</span>
       </div>
-      <p className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">
-        在下方提问；需要核对命中时点「排查检索」。
+      <p className="text-[length:var(--text-meta)] leading-relaxed text-[var(--color-text-secondary)]">
+        在下方提问；需要核对命中时点右上角「排查检索」。
       </p>
     </header>
   );

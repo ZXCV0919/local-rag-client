@@ -109,13 +109,13 @@ export function InputBar({ disabled, streaming, showSuggestions = false, prefill
 
   return (
 
-    <div className="shrink-0 border-t border-[var(--color-border)] bg-[var(--color-bg-primary)] px-4 py-3">
+    <div className="shrink-0 border-t border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface)_92%,var(--color-bg-primary))] px-4 py-4">
 
-      <div className="w-full min-w-0 md:px-2">
+      <div className="w-full min-w-0">
 
         {showSuggestions && !streaming ? (
 
-          <div className="mb-2 flex flex-wrap gap-2">
+          <div className="mb-3 flex flex-wrap gap-2">
 
             {SUGGESTIONS.map((s) => (
 
@@ -127,7 +127,7 @@ export function InputBar({ disabled, streaming, showSuggestions = false, prefill
 
                 onClick={() => setText(s)}
 
-                className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1 text-[length:var(--text-meta)] text-[var(--color-text-secondary)] transition-colors hover:border-[color-mix(in_srgb,var(--color-accent)_42%,var(--color-border))] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-[length:var(--text-meta)] text-[var(--color-text-secondary)] transition-colors hover:border-[color-mix(in_srgb,var(--color-accent)_42%,var(--color-border))] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
 
               >
 
@@ -141,7 +141,7 @@ export function InputBar({ disabled, streaming, showSuggestions = false, prefill
 
         ) : null}
 
-        <div className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 shadow-[var(--shadow-sm)]">
+        <div className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 shadow-[var(--shadow-float)]">
 
           <div className="flex items-end gap-2">
 

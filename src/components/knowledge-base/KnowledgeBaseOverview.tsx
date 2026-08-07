@@ -160,18 +160,52 @@ export function KnowledgeBaseOverview() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <KbSectionNav kbId={id} active="overview" />
-      <div className="mx-auto w-full max-w-4xl flex-1 overflow-auto p-6">
+      <div className="mx-auto w-full max-w-5xl flex-1 overflow-auto px-6 py-6 lg:px-8">
         <button
           type="button"
           onClick={() => navigate('/')}
-          className="mb-3 text-[length:var(--text-meta)] text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-text-primary)]"
+          className="mb-4 text-[length:var(--text-meta)] text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-text-primary)]"
         >
           ← 全部知识库
         </button>
-        <h1 className="text-[length:var(--text-page-title)] font-bold text-[var(--color-text-primary)]">{kb.name}</h1>
-        {kb.description ? (
-          <p className="mt-1 text-[length:var(--text-body)] text-[var(--color-text-secondary)]">{kb.description}</p>
-        ) : null}
+
+        <section
+          className="relative overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-hero)] sm:p-8"
+          style={{
+            backgroundImage:
+              'radial-gradient(ellipse 80% 120% at 100% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 55%)',
+          }}
+        >
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="min-w-0 max-w-2xl">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
+                知识库工作台
+              </p>
+              <h1 className="mt-2 text-[length:var(--text-page-title)] font-bold tracking-tight text-[var(--color-text-primary)]">
+                {kb.name}
+              </h1>
+              <p className="mt-2 text-[length:var(--text-body)] leading-relaxed text-[var(--color-text-secondary)]">
+                {kb.description || '导入文档后即可检索问答；回答会附带来源引用。'}
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => navigate(`/kb/${id}/chat`)}
+                className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-on-accent)] shadow-[var(--shadow-sm)] transition-colors duration-150 hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              >
+                开始提问
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/kb/${id}/documents`)}
+                className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-[var(--color-btn-ghost-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              >
+                管理文档
+              </button>
+            </div>
+          </div>
+        </section>
 
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <StatCard
@@ -205,9 +239,9 @@ export function KnowledgeBaseOverview() {
           />
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-          <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-            <h2 className="text-sm font-semibold text-[var(--color-text-primary)]">最近对话</h2>
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
+          <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
+            <h2 className="text-[length:var(--text-section)] font-semibold text-[var(--color-text-primary)]">最近对话</h2>
             {convLoading ? (
               <p className="mt-3 text-sm text-[var(--color-text-secondary)]">加载中…</p>
             ) : convError ? (
@@ -215,7 +249,7 @@ export function KnowledgeBaseOverview() {
                 <SectionError onRetry={() => void loadConversations()} />
               </div>
             ) : conversations.length === 0 ? (
-              <p className="mt-3 text-sm text-[var(--color-text-secondary)]">暂无对话，点击下方开始提问。</p>
+              <p className="mt-3 text-sm text-[var(--color-text-secondary)]">暂无对话，点击上方「开始提问」。</p>
             ) : (
               <ul className="mt-3 space-y-1">
                 {conversations.map((c) => (
@@ -223,9 +257,9 @@ export function KnowledgeBaseOverview() {
                     <button
                       type="button"
                       onClick={() => navigate(`/kb/${id}/chat/${c.id}`)}
-                      className="flex w-full items-center justify-between gap-3 rounded-[length:var(--radius-control)] px-2 py-2 text-left transition-colors duration-150 hover:bg-[var(--color-btn-ghost-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                      className="flex w-full items-center justify-between gap-3 rounded-[length:var(--radius-control)] px-2.5 py-2.5 text-left transition-colors duration-150 hover:bg-[var(--color-btn-ghost-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                     >
-                      <span className="min-w-0 truncate text-sm text-[var(--color-text-primary)]">
+                      <span className="min-w-0 truncate text-sm font-medium text-[var(--color-text-primary)]">
                         {c.title || '未命名对话'}
                       </span>
                       <span className="shrink-0 text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">
@@ -238,8 +272,8 @@ export function KnowledgeBaseOverview() {
             )}
           </section>
 
-          <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-            <h2 className="text-sm font-semibold text-[var(--color-text-primary)]">文档动态</h2>
+          <section className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]">
+            <h2 className="text-[length:var(--text-section)] font-semibold text-[var(--color-text-primary)]">文档动态</h2>
             {docsLoading ? (
               <p className="mt-3 text-sm text-[var(--color-text-secondary)]">加载中…</p>
             ) : docsError ? (
@@ -247,43 +281,29 @@ export function KnowledgeBaseOverview() {
                 <SectionError onRetry={() => void loadDocuments()} />
               </div>
             ) : (
-              <dl className="mt-3 grid grid-cols-3 gap-3">
-                <div>
+              <dl className="mt-4 grid grid-cols-3 gap-3">
+                <div className="rounded-[length:var(--radius-control)] bg-[var(--color-muted-bg)] px-3 py-3">
                   <dt className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">就绪</dt>
-                  <dd className="mt-1 text-xl font-semibold text-[var(--color-text-primary)]">{health.ready}</dd>
+                  <dd className="mt-1 text-2xl font-semibold text-[var(--color-text-primary)]">{health.ready}</dd>
                 </div>
-                <div>
+                <div className="rounded-[length:var(--radius-control)] bg-[var(--color-muted-bg)] px-3 py-3">
                   <dt className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">处理中</dt>
-                  <dd className="mt-1 text-xl font-semibold text-[var(--color-text-primary)]">{health.processing}</dd>
+                  <dd className="mt-1 text-2xl font-semibold text-[var(--color-text-primary)]">{health.processing}</dd>
                 </div>
-                <div>
+                <div className="rounded-[length:var(--radius-control)] bg-[var(--color-muted-bg)] px-3 py-3">
                   <dt className="text-[length:var(--text-meta)] text-[var(--color-text-secondary)]">失败</dt>
-                  <dd className="mt-1 text-xl font-semibold text-[var(--color-text-primary)]">{health.error}</dd>
+                  <dd className="mt-1 text-2xl font-semibold text-[var(--color-text-primary)]">{health.error}</dd>
                 </div>
               </dl>
             )}
           </section>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={() => navigate(`/kb/${id}/chat`)}
-            className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-[var(--color-on-accent)] transition-colors duration-150 hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-          >
-            开始提问
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate(`/kb/${id}/documents`)}
-            className="rounded-[length:var(--radius-control)] border border-[var(--color-border)] px-5 py-2.5 text-sm text-[var(--color-text-primary)] transition-colors duration-150 hover:bg-[var(--color-btn-ghost-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-          >
-            管理文档
-          </button>
+        <div className="mt-8 flex justify-end">
           <button
             type="button"
             onClick={() => setDeleteOpen(true)}
-            className="ml-auto rounded-[length:var(--radius-control)] border border-[var(--color-danger-border)] px-5 py-2.5 text-sm text-[var(--color-danger-text)] transition-colors duration-150 hover:bg-[var(--color-danger-hover-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            className="rounded-[length:var(--radius-control)] border border-[var(--color-danger-border)] px-4 py-2 text-sm text-[var(--color-danger-text)] transition-colors duration-150 hover:bg-[var(--color-danger-hover-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
             删除知识库
           </button>

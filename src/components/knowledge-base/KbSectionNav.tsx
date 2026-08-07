@@ -15,7 +15,10 @@ export function KbSectionNav({
 }) {
   const navigate = useAppNavigate();
   return (
-    <nav className="flex gap-1 border-b border-[var(--color-border)] px-4 pt-3" aria-label="知识库分区">
+    <nav
+      className="flex shrink-0 gap-1 border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface)_78%,transparent)] px-5 pt-2 backdrop-blur-sm"
+      aria-label="知识库分区"
+    >
       {ITEMS.map((item) => {
         const isActive = item.key === active;
         return (
@@ -25,8 +28,8 @@ export function KbSectionNav({
             onClick={() => navigate(item.path(kbId))}
             className={
               isActive
-                ? 'border-b-2 border-[var(--color-accent)] px-3 py-2 text-sm font-semibold text-[var(--color-text-primary)]'
-                : 'border-b-2 border-transparent px-3 py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                ? 'relative border-b-2 border-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-[var(--color-text-primary)]'
+                : 'border-b-2 border-transparent px-4 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]'
             }
           >
             {item.label}

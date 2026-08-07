@@ -638,77 +638,47 @@ export function ChatInterface() {
 
   return (
 
-    <div className="mx-auto flex h-full min-h-0 w-full max-w-[720px] flex-1 flex-col overflow-hidden px-4">
-
-      <div className="flex w-full min-w-0 shrink-0 flex-col pt-1">
-
-        {kb ? (
-          <ChatHeader
-            kbName={kb.name}
-            model={headerModel}
-            retrievalMode={retrievalMode}
-            chatProvider={settings.chat_provider}
-          />
-        ) : null}
-
-      </div>
-
-
-
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-
-        <div className="flex w-full min-w-0 min-h-0 flex-1 flex-col">
-
-          {chatError ? (
-
-            <div className="mb-2 shrink-0 rounded-lg border border-[var(--color-danger-border)] bg-[var(--badge-error-bg)] px-3 py-2 text-xs text-[var(--badge-error-fg)]">
-
-              {chatError}
-
-            </div>
-
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-[760px] flex-1 flex-col overflow-hidden px-4 pb-3 pt-2">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-float)]">
+        <div className="flex w-full min-w-0 shrink-0 flex-col border-b border-[var(--color-border)] px-5 pt-4">
+          {kb ? (
+            <ChatHeader
+              kbName={kb.name}
+              model={headerModel}
+              retrievalMode={retrievalMode}
+              chatProvider={settings.chat_provider}
+            />
           ) : null}
-
-          <MessageList
-
-            conversationId={conversationId}
-
-            messages={messages}
-
-            retrieving={retrieving}
-
-            pendingLlm={pendingLlm}
-
-            streamingBody={showDraft ? (streamingBody ?? '') : null}
-
-            streamingReferencedChunkIds={streamingRefs}
-
-            highlightQuery={lastUserQuery}
-
-          />
-
         </div>
 
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-5">
+          <div className="flex w-full min-w-0 min-h-0 flex-1 flex-col">
+            {chatError ? (
+              <div className="mb-2 mt-3 shrink-0 rounded-[length:var(--radius-control)] border border-[var(--color-danger-border)] bg-[var(--badge-error-bg)] px-3 py-2 text-xs text-[var(--badge-error-fg)]">
+                {chatError}
+              </div>
+            ) : null}
+            <MessageList
+              conversationId={conversationId}
+              messages={messages}
+              retrieving={retrieving}
+              pendingLlm={pendingLlm}
+              streamingBody={showDraft ? (streamingBody ?? '') : null}
+              streamingReferencedChunkIds={streamingRefs}
+              highlightQuery={lastUserQuery}
+            />
+          </div>
+        </div>
+
+        <InputBar
+          disabled={!kb}
+          streaming={pipelineRunning}
+          showSuggestions={showEmpty}
+          prefill={inputPrefill}
+          onSend={handleSend}
+          onStop={handleStop}
+        />
       </div>
-
-
-
-      <InputBar
-
-        disabled={!kb}
-
-        streaming={pipelineRunning}
-
-        showSuggestions={showEmpty}
-
-        prefill={inputPrefill}
-
-        onSend={handleSend}
-
-        onStop={handleStop}
-
-      />
-
     </div>
 
   );
