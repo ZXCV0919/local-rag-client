@@ -4,6 +4,8 @@ import { useAppNavigate } from '../../hooks/useAppNavigate';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { useDocument } from '../../hooks/useDocument';
 import { useToastStore } from '../../store/toast';
+import { EmptyState } from '../common/EmptyState';
+import { KbSectionNav } from '../knowledge-base/KbSectionNav';
 import { DocumentCard } from './DocumentCard';
 import { DocumentImporter } from './DocumentImporter';
 import { reprocessDocument } from '../../services/importer';
@@ -85,16 +87,11 @@ export function DocumentList() {
   }
 
   return (
-    <div className="p-6 w-full max-w-[min(100%,1680px)] mx-auto">
+    <div className="flex h-full min-h-0 flex-col">
+      <KbSectionNav kbId={kbId} active="documents" />
+      <div className="mx-auto w-full max-w-[min(100%,1680px)] flex-1 overflow-auto p-6">
       <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
         <div className="min-w-0 flex-1">
-          <button
-            type="button"
-            onClick={() => navigate(`/kb/${kbId}`)}
-            className="text-sm text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-text-primary)] mb-1"
-          >
-            ← 返回概览
-          </button>
           <h1 className="text-xl font-bold">文档管理</h1>
           <p className="text-sm text-[var(--color-text-secondary)] mt-1">
             导入后自动解析、分块、向量化并写入 ChromaDB；完成后状态为「就绪」。
@@ -116,7 +113,7 @@ export function DocumentList() {
         </div>
       </div>
 
-      <div className="mb-8">
+      <div id="document-import-zone" className="mb-8 scroll-mt-4">
         {kb ? (
           <DocumentImporter
             knowledgeBase={kb}
@@ -146,20 +143,22 @@ export function DocumentList() {
           ))}
         </ul>
       ) : documents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-[length:var(--radius-card)] border border-dashed border-[var(--color-border)] px-6 py-14 text-center">
-          <div
-            className="flex h-14 w-14 items-center justify-center rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-accent)_12%,var(--color-surface))] text-[var(--color-accent)] shadow-[var(--shadow-sm)]"
-            aria-hidden
-          >
-            <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <div className="space-y-1">
-            <p className="font-medium text-[var(--color-text-primary)]">暂无文档</p>
-            <p className="max-w-md text-sm text-[var(--color-text-secondary)] leading-relaxed">使用上方区域导入文件，解析完成后即可检索。</p>
-          </div>
+        <div className="rounded-[length:var(--radius-card)] border border-dashed border-[var(--color-border)]">
+          <EmptyState
+            title="还没有文档"
+            description="导入 PDF / Markdown / Word，解析并向量化完成后即可提问。大文件处理时请保持窗口打开。"
+            primaryLabel="去导入"
+            onPrimary={() => {
+              document.getElementById('document-import-zone')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            steps={['选择或拖入文件', '等待解析与向量化完成（状态变为「就绪」）', '回到对话页提问']}
+            icon={
+              <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            }
+          />
         </div>
       ) : filteredDocs.length === 0 ? (
         <p className="text-sm text-[var(--color-text-secondary)] py-8 text-center">
@@ -180,6 +179,7 @@ export function DocumentList() {
           ))}
         </ul>
       )}
+      </div>
     </div>
   );
 }
