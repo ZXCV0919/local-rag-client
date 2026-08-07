@@ -17,8 +17,8 @@
     0 18px 48px -18px color-mix(in srgb, var(--color-text-primary) 18%, transparent),
     0 6px 18px -8px color-mix(in srgb, var(--color-text-primary) 10%, transparent);
   --shadow-hero:
-    0 24px 60px -28px color-mix(in srgb, var(--color-accent) 28%, transparent),
-    0 8px 24px -12px color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+    0 16px 40px -24px color-mix(in srgb, var(--color-text-primary) 14%, transparent),
+    0 6px 16px -10px color-mix(in srgb, var(--color-text-primary) 8%, transparent);
   --font-sans:
     'Plus Jakarta Sans', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono:
@@ -31,91 +31,85 @@
 /* 未设置 data-theme 时与浅色一致（main.tsx 会尽早写入 data-theme） */
 :root:not([data-theme]),
 :root[data-theme='light'] {
-  --color-bg-primary: #f0ebe3;
-  --color-bg-secondary: #e5ddd2;
-  --color-surface: #fffcf8;
-  --color-bg-sidebar: #121a18;
-  --color-bg-hover: #1e2a27;
-  --color-bg-active: #273632;
-  --color-text-primary: #14201c;
-  --color-text-secondary: #5c6b64;
-  --color-text-sidebar: #f2f0eb;
-  --color-text-sidebar-dim: #9aa8a2;
-  --color-border: #ddd4c8;
-  --color-border-dark: #c9bdb0;
-  --color-border-sidebar: #24302c;
-  --color-muted-bg: #ebe4da;
+  --color-bg-primary: #f7f7f8;
+  --color-bg-secondary: #efefef;
+  --color-surface: #ffffff;
+  --color-bg-sidebar: #f3f3f4;
+  --color-bg-hover: #ebebeb;
+  --color-bg-active: #e4e4e4;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #6b6b6b;
+  --color-text-sidebar: #1a1a1a;
+  --color-text-sidebar-dim: #6b6b6b;
+  --color-border: #e5e5e5;
+  --color-border-dark: #d4d4d4;
+  --color-border-sidebar: #e5e5e5;
+  --color-muted-bg: #efefef;
   --color-user-bubble-bg: #0f766e;
   --color-user-bubble-fg: #ffffff;
   --color-sidebar-icon-bg: #0f766e;
   --color-sidebar-icon-fg: #ffffff;
-  --color-code-bg: #ebe4da;
-  --color-code-block-bg: #14201c;
+  --color-code-bg: #efefef;
+  --color-code-block-bg: #1a1a1a;
   --color-code-block-fg: #e4e4e7;
-  --color-btn-ghost-hover: #ebe4da;
+  --color-btn-ghost-hover: #ebebeb;
   --color-danger-text: #b91c1c;
   --color-danger-border: #fecaca;
   --color-danger-hover-bg: #fef2f2;
-  --badge-neutral-bg: #f5f5f4;
-  --badge-neutral-fg: #44403c;
-  --badge-info-bg: #ccfbf1;
+  --badge-neutral-bg: #f0f0f0;
+  --badge-neutral-fg: #525252;
+  --badge-info-bg: #e8e8e8;
   --badge-info-fg: #0f766e;
   --badge-success-bg: #dcfce7;
   --badge-success-fg: #15803d;
   --badge-error-bg: #fee2e2;
   --badge-error-fg: #b91c1c;
-  --color-citation-bg: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --color-citation-bg: color-mix(in srgb, var(--color-accent) 10%, transparent);
   --color-citation-fg: var(--color-accent);
-  --color-citation-border: color-mix(in srgb, var(--color-accent) 35%, transparent);
-  --color-citation-hover-bg: color-mix(in srgb, var(--color-accent) 18%, transparent);
-  --color-bg-gradient-mid: rgba(15, 118, 110, 0.09);
-  --gradient-page:
-    radial-gradient(ellipse 120% 70% at 12% -10%, var(--color-bg-gradient-mid), transparent 55%),
-    radial-gradient(ellipse 90% 55% at 100% 0%, rgba(180, 83, 9, 0.06), transparent 48%),
-    linear-gradient(180deg, #f4efe7 0%, #ebe4da 100%);
+  --color-citation-border: color-mix(in srgb, var(--color-accent) 28%, transparent);
+  --color-citation-hover-bg: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  --color-bg-gradient-mid: transparent;
+  --gradient-page: var(--color-bg-primary);
 }
 
 :root[data-theme='dark'] {
-  --color-bg-primary: #0c1210;
-  --color-bg-secondary: #141c19;
-  --color-surface: #1a2420;
-  --color-bg-sidebar: #101816;
-  --color-bg-hover: #24302b;
-  --color-bg-active: #2c3a33;
-  --color-user-bubble-bg: #24302b;
-  --color-user-bubble-fg: #f1f5f4;
-  --color-sidebar-icon-bg: #24302b;
-  --color-sidebar-icon-fg: #94a3a0;
-  --color-text-primary: #f1f5f4;
-  --color-text-secondary: #94a3a0;
-  --color-text-sidebar: #e2e8e6;
-  --color-text-sidebar-dim: #94a3a0;
-  --color-border: #2d3b35;
-  --color-border-dark: #3d4f46;
-  --color-border-sidebar: #2d3b35;
-  --color-muted-bg: #2d3b35;
-  --color-code-bg: #1e2a25;
-  --color-code-block-bg: #0c1210;
-  --color-code-block-fg: #e2e8e6;
+  --color-bg-primary: #121212;
+  --color-bg-secondary: #1a1a1a;
+  --color-surface: #1e1e1e;
+  --color-bg-sidebar: #171717;
+  --color-bg-hover: #262626;
+  --color-bg-active: #2e2e2e;
+  --color-user-bubble-bg: #2a2a2a;
+  --color-user-bubble-fg: #f5f5f5;
+  --color-sidebar-icon-bg: #2a2a2a;
+  --color-sidebar-icon-fg: #a3a3a3;
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #a3a3a3;
+  --color-text-sidebar: #f5f5f5;
+  --color-text-sidebar-dim: #a3a3a3;
+  --color-border: #2e2e2e;
+  --color-border-dark: #3d3d3d;
+  --color-border-sidebar: #2e2e2e;
+  --color-muted-bg: #262626;
+  --color-code-bg: #1a1a1a;
+  --color-code-block-bg: #0a0a0a;
+  --color-code-block-fg: #e5e5e5;
   --color-btn-ghost-hover: rgba(255, 255, 255, 0.06);
   --color-danger-text: #fca5a5;
   --color-danger-border: rgba(248, 113, 113, 0.35);
   --color-danger-hover-bg: rgba(127, 29, 29, 0.35);
-  --badge-neutral-bg: #374151;
-  --badge-neutral-fg: #e5e7eb;
-  --badge-info-bg: rgba(45, 212, 191, 0.18);
+  --badge-neutral-bg: #2e2e2e;
+  --badge-neutral-fg: #e5e5e5;
+  --badge-info-bg: rgba(15, 118, 110, 0.22);
   --badge-info-fg: #5eead4;
   --badge-success-bg: rgba(34, 197, 94, 0.22);
   --badge-success-fg: #86efac;
   --badge-error-bg: rgba(239, 68, 68, 0.22);
   --badge-error-fg: #fca5a5;
-  --color-citation-bg: color-mix(in srgb, #2dd4bf 18%, transparent);
+  --color-citation-bg: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --color-citation-fg: #5eead4;
-  --color-citation-border: color-mix(in srgb, #2dd4bf 35%, transparent);
-  --color-citation-hover-bg: color-mix(in srgb, #2dd4bf 28%, transparent);
-  --color-bg-gradient-mid: rgba(15, 118, 110, 0.12);
-  --gradient-page:
-    radial-gradient(ellipse 140% 90% at 50% -25%, var(--color-bg-gradient-mid), transparent 52%),
-    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(45, 212, 191, 0.05), transparent 45%),
-    var(--color-bg-primary);
+  --color-citation-border: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  --color-citation-hover-bg: color-mix(in srgb, var(--color-accent) 28%, transparent);
+  --color-bg-gradient-mid: transparent;
+  --gradient-page: var(--color-bg-primary);
 }
