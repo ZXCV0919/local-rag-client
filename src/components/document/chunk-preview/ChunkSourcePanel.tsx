@@ -1,9 +1,20 @@
-import { useLayoutEffect, useMemo, useRef, type ReactNode, type Ref } from 'react';
-import type { Chunk, DocContent } from '../../../types/chunk';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type Ref,
+} from 'react';
+import type { Chunk, DocContent, DocSection } from '../../../types/chunk';
 import {
   buildFullDocumentText,
   chunkHeadingLabel,
   findHighlightInFullText,
+  sliceContextWindow,
+  SOURCE_PREVIEW_CONTEXT_CHARS,
+  type TextRange,
 } from '../../../utils/chunk-display';
 
 const HIGHLIGHT_SCROLL_PADDING = 24;
@@ -38,9 +49,17 @@ function isHighlightVisible(container: HTMLElement, target: HTMLElement): boolea
   return targetRect.top >= visibleTop && targetRect.bottom <= visibleBottom;
 }
 
+function sectionBlockText(section: DocSection): string {
+  const heading = (section.heading_path || section.heading || '').trim();
+  const content = section.content ?? '';
+  if (!heading) return content;
+  if (content.trimStart().startsWith(heading)) return content;
+  return `${heading}\n\n${content}`;
+}
+
 function renderHighlighted(
   text: string,
-  range: { start: number; end: number },
+  range: TextRange,
   markRef: Ref<HTMLElement>,
   pulseKey: string,
 ): ReactNode {
@@ -59,6 +78,41 @@ function renderHighlighted(
   );
 }
 
+function renderExpandedSections(
+  sections: DocSection[],
+  highlightRange: TextRange | null,
+  markRef: Ref<HTMLElement>,
+  pulseKey: string,
+): ReactNode {
+  const blocks = sections.map(sectionBlockText).filter((block) => block.length > 0);
+
+  let offset = 0;
+  return blocks.map((block, idx) => {
+    if (idx > 0) offset += 2; // `\n\n` join separators in fullText
+    const blockStart = offset;
+    const blockEnd = offset + block.length;
+    offset = blockEnd;
+
+    let body: ReactNode = block;
+    if (
+      highlightRange &&
+      highlightRange.start >= blockStart &&
+      highlightRange.start < blockEnd
+    ) {
+      const localStart = highlightRange.start - blockStart;
+      const localEnd = Math.min(highlightRange.end, blockEnd) - blockStart;
+      body = renderHighlighted(block, { start: localStart, end: localEnd }, markRef, pulseKey);
+    }
+
+    return (
+      <div key={idx} className="whitespace-pre-wrap break-words">
+        {idx > 0 ? '\n\n' : null}
+        {body}
+      </div>
+    );
+  });
+}
+
 interface ChunkSourcePanelProps {
   source: DocContent | null;
   sourceLoading: boolean;
@@ -72,16 +126,26 @@ export function ChunkSourcePanel({
 }: ChunkSourcePanelProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const highlightRef = useRef<HTMLElement | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
-  const fullText = useMemo(() => {
-    if (!source) return '';
-    return buildFullDocumentText(source.sections);
+  useEffect(() => {
+    setExpanded(false);
   }, [source]);
 
-  const highlightRange = useMemo(() => {
-    if (!fullText || !activeChunk) return null;
-    return findHighlightInFullText(fullText, activeChunk);
-  }, [fullText, activeChunk]);
+  const fullText = useMemo(
+    () => (source ? buildFullDocumentText(source.sections) : ''),
+    [source],
+  );
+
+  const highlightRange = useMemo(
+    () => (fullText && activeChunk ? findHighlightInFullText(fullText, activeChunk) : null),
+    [fullText, activeChunk],
+  );
+
+  const windowed = useMemo(
+    () => sliceContextWindow(fullText, highlightRange, SOURCE_PREVIEW_CONTEXT_CHARS),
+    [fullText, highlightRange],
+  );
 
   useLayoutEffect(() => {
     const container = scrollContainerRef.current;
@@ -109,7 +173,7 @@ export function ChunkSourcePanel({
       cancelled = true;
       cancelAnimationFrame(raf);
     };
-  }, [activeChunk?.id, highlightRange?.start, highlightRange?.end]);
+  }, [activeChunk?.id, highlightRange?.start, highlightRange?.end, expanded]);
 
   if (sourceLoading) {
     return (
@@ -143,38 +207,79 @@ export function ChunkSourcePanel({
       ? `分块 ${activeChunk.chunk_index + 1} · ${headingLabel}`
       : `分块 ${activeChunk.chunk_index + 1}`;
 
+  const showWindowed = !expanded && highlightRange && windowed.highlight;
+  const showExpanded = expanded;
+  const showArticle = showWindowed || showExpanded;
+
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden">
       <div className="shrink-0 border-b border-[var(--color-border)] px-4 py-2.5">
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
-          全文对照
-        </p>
-        <p className="mt-0.5 truncate text-sm font-medium text-[var(--color-text-primary)]">
-          {chunkSubtitle}
-        </p>
-        {highlightRange ? (
-          <p className="mt-1 text-[10px] text-[var(--color-accent)]">已定位当前分块在原文中的位置</p>
-        ) : (
-          <p className="mt-1 text-[10px] text-[var(--color-text-secondary)]">
-            未能精确匹配原文位置，已显示全文
-          </p>
-        )}
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
+              全文对照
+            </p>
+            <p className="mt-0.5 truncate text-sm font-medium text-[var(--color-text-primary)]">
+              {chunkSubtitle}
+            </p>
+            {highlightRange ? (
+              <p className="mt-1 text-[10px] text-[var(--color-accent)]">
+                已定位当前分块在原文中的位置
+              </p>
+            ) : (
+              <p className="mt-1 text-[10px] text-[var(--color-text-secondary)]">
+                未能精确匹配原文位置，请查看下方分块内容
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="shrink-0 rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-[11px] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
+          >
+            {expanded ? '收起' : '展开全文'}
+          </button>
+        </div>
       </div>
       <div
         ref={scrollContainerRef}
         className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain p-4"
       >
-        <article className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-sm leading-relaxed text-[var(--color-text-primary)]">
-          <div className="whitespace-pre-wrap break-words">
-            {highlightRange ? (
-              renderHighlighted(fullText, highlightRange, highlightRef, activeChunk.id)
+        {showArticle ? (
+          <article className="rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-sm leading-relaxed text-[var(--color-text-primary)]">
+            {showWindowed ? (
+              <div className="whitespace-pre-wrap break-words">
+                {windowed.hasPrefix ? (
+                  <p className="mb-2 text-[10px] text-[var(--color-text-secondary)]">
+                    … 前文已省略
+                  </p>
+                ) : null}
+                {renderHighlighted(
+                  windowed.text,
+                  windowed.highlight!,
+                  highlightRef,
+                  activeChunk.id,
+                )}
+                {windowed.hasSuffix ? (
+                  <p className="mt-2 text-[10px] text-[var(--color-text-secondary)]">
+                    后文已省略 …
+                  </p>
+                ) : null}
+              </div>
             ) : (
-              fullText
+              renderExpandedSections(
+                source.sections,
+                highlightRange,
+                highlightRef,
+                activeChunk.id,
+              )
             )}
-          </div>
-        </article>
+          </article>
+        ) : null}
         {!highlightRange && activeChunk.content.trim() ? (
-          <aside className="mt-4 rounded-[length:var(--radius-control)] border border-[var(--color-citation-border)] bg-[var(--color-citation-bg)] px-3 py-2.5">
+          <aside
+            className={`${showArticle ? 'mt-4 ' : ''}rounded-[length:var(--radius-control)] border border-[var(--color-citation-border)] bg-[var(--color-citation-bg)] px-3 py-2.5`}
+          >
             <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
               当前分块内容
             </p>
