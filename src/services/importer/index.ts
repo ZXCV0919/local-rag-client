@@ -7,6 +7,7 @@ import type { Document, ImportProgress } from '../../types/document';
 import type { KnowledgeBase } from '../../types/knowledge-base';
 import type { ChunkRow } from '../../types/chunk';
 import { DEFAULT_SETTINGS } from '../../types/settings';
+import { mergeSectionsForPreview, saveDocumentSourceCache } from '../document/source-preview';
 import { parseAndChunkDocument } from './parse-and-chunk';
 
 export type ProgressHandler = (p: ImportProgress) => void;
@@ -235,7 +236,7 @@ export async function importAndChunkDocument(
       completed: 1,
     });
 
-    const { chunks } = await parseAndChunkDocument(
+    const { parsed, chunks } = await parseAndChunkDocument(
       buffer,
       fileName,
       fileType,
@@ -248,6 +249,12 @@ export async function importAndChunkDocument(
         });
       },
     );
+
+    const previewContent = {
+      ...parsed.content,
+      sections: mergeSectionsForPreview(parsed.content.sections),
+    };
+    await saveDocumentSourceCache(docId, contentHash, previewContent);
 
     report({
       status: 'processing',
@@ -341,7 +348,7 @@ export async function reprocessDocument(
       completed: 1,
     });
 
-    const { chunks } = await parseAndChunkDocument(
+    const { parsed, chunks } = await parseAndChunkDocument(
       buffer,
       doc.file_name,
       fileType,
@@ -354,6 +361,12 @@ export async function reprocessDocument(
         });
       },
     );
+
+    const previewContent = {
+      ...parsed.content,
+      sections: mergeSectionsForPreview(parsed.content.sections),
+    };
+    await saveDocumentSourceCache(docId, doc.content_hash, previewContent);
 
     report({
       status: 'processing',
