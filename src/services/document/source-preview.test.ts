@@ -19,6 +19,7 @@ vi.mock('../parser', () => ({
 
 import {
   clearSourcePreviewMemoryCache,
+  invalidateSourcePreviewMemoryEntry,
   loadDocumentSource,
   saveDocumentSourceCache,
 } from './source-preview';
@@ -31,6 +32,35 @@ const doc = {
   file_path: '/tmp/a.md',
   file_type: 'md',
 } as Document;
+
+describe('invalidateSourcePreviewMemoryEntry', () => {
+  beforeEach(() => {
+    clearSourcePreviewMemoryCache();
+    invokeMock.mockReset();
+  });
+
+  it('drops a single memory entry so next load hits disk/parse again', async () => {
+    invokeMock.mockResolvedValue(null);
+    await saveDocumentSourceCache('doc-1', 'hash-a', {
+      title: 't',
+      file_type: 'md',
+      sections: [],
+    });
+    invalidateSourcePreviewMemoryEntry('doc-1');
+    invokeMock.mockImplementation(async (cmd: string) => {
+      if (cmd === 'read_source_preview_cache') return null;
+      if (cmd === 'read_file_bytes') return Array.from(new TextEncoder().encode('# hi'));
+      if (cmd === 'write_source_preview_cache') return null;
+      throw new Error(`unexpected ${cmd}`);
+    });
+    const loaded = await loadDocumentSource(doc);
+    expect(loaded?.title).toBe('parsed');
+    expect(invokeMock).toHaveBeenCalledWith(
+      'read_source_preview_cache',
+      expect.objectContaining({ documentId: 'doc-1' }),
+    );
+  });
+});
 
 describe('loadDocumentSource', () => {
   beforeEach(() => {

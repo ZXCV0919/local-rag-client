@@ -2,8 +2,9 @@ use crate::db::admin;
 use crate::db::{chunk, document, get_pool, knowledge_base};
 use crate::errors::AppError;
 use crate::services::chromadb::ChromaDbState;
+use crate::services::source_preview_cache;
 use serde::Serialize;
-use tauri::State;
+use tauri::{AppHandle, State};
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -44,12 +45,17 @@ pub async fn get_storage_statistics(state: State<'_, ChromaDbState>) -> Result<S
 }
 
 /// Wipe all user data tables; **settings** preserved. Chroma collections cleared by KB id.
+/// Also removes `app_data_dir/source_preview/` so disk cache does not leave orphans.
 #[tauri::command]
-pub async fn clear_all_application_data(state: State<'_, ChromaDbState>) -> Result<(), AppError> {
+pub async fn clear_all_application_data(
+    app: AppHandle,
+    state: State<'_, ChromaDbState>,
+) -> Result<(), AppError> {
     let ids: Vec<String> = knowledge_base::list()?.into_iter().map(|k| k.id).collect();
     state.delete_collections_for_kb_ids(&ids).await;
     let pool = get_pool().map_err(AppError::db)?;
     let mut conn = pool.get()?;
     admin::purge_all_user_tables(&mut conn)?;
+    let _ = source_preview_cache::clear_all_caches(&app);
     Ok(())
 }

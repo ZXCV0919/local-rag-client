@@ -60,16 +60,19 @@ export function resolveSectionForChunk(sections: DocSection[], chunk: Chunk): Do
   return sections[0] ?? null;
 }
 
+/** Per-section text block used by full-document join and expanded source preview. */
+export function sectionBlockText(section: DocSection): string {
+  const heading = (section.heading_path || section.heading || '').trim();
+  const content = section.content ?? '';
+  if (!heading) return content;
+  if (content.trimStart().startsWith(heading)) return content;
+  return `${heading}\n\n${content}`;
+}
+
 export function buildFullDocumentText(sections: DocSection[]): string {
   if (sections.length === 0) return '';
   return sections
-    .map((section) => {
-      const heading = (section.heading_path || section.heading || '').trim();
-      const content = section.content ?? '';
-      if (!heading) return content;
-      if (content.trimStart().startsWith(heading)) return content;
-      return `${heading}\n\n${content}`;
-    })
+    .map(sectionBlockText)
     .filter((block) => block.length > 0)
     .join('\n\n');
 }

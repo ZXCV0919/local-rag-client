@@ -12,6 +12,7 @@ import {
   buildFullDocumentText,
   chunkHeadingLabel,
   findHighlightInFullText,
+  sectionBlockText,
   sliceContextWindow,
   SOURCE_PREVIEW_CONTEXT_CHARS,
   type TextRange,
@@ -47,14 +48,6 @@ function isHighlightVisible(container: HTMLElement, target: HTMLElement): boolea
   const visibleTop = containerRect.top + HIGHLIGHT_SCROLL_PADDING;
   const visibleBottom = containerRect.bottom - HIGHLIGHT_SCROLL_PADDING;
   return targetRect.top >= visibleTop && targetRect.bottom <= visibleBottom;
-}
-
-function sectionBlockText(section: DocSection): string {
-  const heading = (section.heading_path || section.heading || '').trim();
-  const content = section.content ?? '';
-  if (!heading) return content;
-  if (content.trimStart().startsWith(heading)) return content;
-  return `${heading}\n\n${content}`;
 }
 
 function renderHighlighted(

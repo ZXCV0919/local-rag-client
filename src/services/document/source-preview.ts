@@ -39,9 +39,18 @@ export function isDegenerateSectionList(sections: DocSection[]): boolean {
 
 const memoryCache = new Map<string, { contentHash: string; content: DocContent }>();
 
-/** Test-only / rare: clear memory map */
+/** Clear entire in-memory source preview map (tests / clear-all). */
 export function clearSourcePreviewMemoryCache(): void {
   memoryCache.clear();
+}
+
+/**
+ * Drop one document's memory entry after disk cache is deleted from Rust
+ * (`delete_document` / `delete_source_preview_cache`). Rust cannot clear JS memory —
+ * frontend delete-document flows must call this after a successful delete.
+ */
+export function invalidateSourcePreviewMemoryEntry(documentId: string): void {
+  memoryCache.delete(documentId);
 }
 
 export async function saveDocumentSourceCache(

@@ -91,6 +91,16 @@ pub fn delete_caches_for_document_ids(app: &AppHandle, ids: &[String]) {
     }
 }
 
+/// Remove the entire `source_preview/` cache directory and recreate it empty.
+pub fn clear_all_caches(app: &AppHandle) -> Result<(), AppError> {
+    let dir = cache_dir(app)?;
+    if dir.exists() {
+        std::fs::remove_dir_all(&dir).map_err(|e| AppError::internal(e.to_string()))?;
+    }
+    cache_dir(app)?;
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::sanitize_document_id;

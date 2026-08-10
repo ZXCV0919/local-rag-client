@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { tauriCommand } from './useDatabase';
 import { useDocumentStore } from '../store/document';
+import { invalidateSourcePreviewMemoryEntry } from '../services/document/source-preview';
 import type { Document, ImportProgress } from '../types/document';
 
 export function useDocument(kbId: string | undefined) {
@@ -46,6 +47,7 @@ export function useDocument(kbId: string | undefined) {
   const deleteDocument = useCallback(async (id: string) => {
     const { removeDocument } = useDocumentStore.getState();
     await tauriCommand<void>('delete_document', { id });
+    invalidateSourcePreviewMemoryEntry(id);
     removeDocument(id);
   }, []);
 
