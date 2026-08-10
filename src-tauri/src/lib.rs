@@ -107,6 +107,9 @@ pub fn run() {
             commands::chromadb::chromadb_delete_documents,
             commands::chromadb::chromadb_collection_count,
             commands::search::search_keyword,
+            commands::source_preview::write_source_preview_cache,
+            commands::source_preview::read_source_preview_cache,
+            commands::source_preview::delete_source_preview_cache,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

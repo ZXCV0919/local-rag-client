@@ -4,7 +4,7 @@ use crate::db::{document, knowledge_base};
 use crate::errors::AppError;
 use crate::services::chromadb::ChromaDbState;
 use serde::Deserialize;
-use tauri::State;
+use tauri::{AppHandle, State};
 use uuid::Uuid;
 
 #[tauri::command]
@@ -145,7 +145,11 @@ pub fn set_chunk_embedding_ids(ids: Vec<ChunkEmbeddingId>) -> Result<(), AppErro
 }
 
 #[tauri::command]
-pub async fn delete_document(id: String, chroma: State<'_, ChromaDbState>) -> Result<(), AppError> {
+pub async fn delete_document(
+    app: AppHandle,
+    id: String,
+    chroma: State<'_, ChromaDbState>,
+) -> Result<(), AppError> {
     let doc = document::get_by_id(&id)?;
     let chunks = chunk::list_by_document(&id)?;
     let token_sum: i32 = chunks.iter().map(|c| c.token_count).sum();
@@ -157,6 +161,7 @@ pub async fn delete_document(id: String, chroma: State<'_, ChromaDbState>) -> Re
     if !emb_ids.is_empty() {
         let _ = chroma.delete_documents(&doc.knowledge_base_id, emb_ids).await;
     }
+    let _ = crate::services::source_preview_cache::delete_cache(&app, &id);
     document::delete(&id)?;
     knowledge_base::adjust_document_count(&doc.knowledge_base_id, -1)?;
     knowledge_base::adjust_total_tokens(&doc.knowledge_base_id, -token_sum)?;

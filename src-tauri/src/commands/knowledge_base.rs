@@ -1,6 +1,8 @@
-use crate::db::{knowledge_base, settings};
+use crate::db::{admin, get_pool, knowledge_base, settings};
 use crate::errors::AppError;
+use crate::services::chromadb::ChromaDbState;
 use serde::{Deserialize, Serialize};
+use tauri::{AppHandle, State};
 
 #[derive(Serialize)]
 pub struct KnowledgeBaseResponse {
@@ -68,9 +70,23 @@ pub fn create_knowledge_base(
         .map(KnowledgeBaseResponse::from)
 }
 
+/// Delete one KB: Chroma collection + nested SQLite rows (docs/chunks/conversations/messages).
 #[tauri::command]
-pub fn delete_knowledge_base(id: String) -> Result<(), AppError> {
-    knowledge_base::delete(&id)
+pub async fn delete_knowledge_base(
+    app: AppHandle,
+    state: State<'_, ChromaDbState>,
+    id: String,
+) -> Result<(), AppError> {
+    // Ensure it exists before mutating chroma/sqlite.
+    let _ = knowledge_base::get_by_id(&id)?;
+    state.delete_collections_for_kb_ids(&[id.clone()]).await;
+    let pool = get_pool().map_err(AppError::db)?;
+    let mut conn = pool.get()?;
+    let docs = crate::db::document::list_by_knowledge_base(&id).unwrap_or_default();
+    let ids: Vec<String> = docs.into_iter().map(|d| d.id).collect();
+    crate::services::source_preview_cache::delete_caches_for_document_ids(&app, &ids);
+    admin::purge_knowledge_base(&mut conn, &id)?;
+    Ok(())
 }
 
 #[tauri::command]

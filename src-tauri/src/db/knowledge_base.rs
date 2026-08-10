@@ -53,6 +53,7 @@ pub fn create(
         .map_err(AppError::from)
 }
 
+#[allow(dead_code)]
 pub fn delete(id: &str) -> Result<(), AppError> {
     let pool = get_pool().map_err(|e| AppError::db(e))?;
     let mut conn = pool.get()?;

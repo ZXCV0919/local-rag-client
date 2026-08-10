@@ -8,3 +8,4 @@ pub mod ollama;
 pub mod search;
 pub mod settings;
 pub mod siliconflow;
+pub mod source_preview;

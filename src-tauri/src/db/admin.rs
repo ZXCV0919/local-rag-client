@@ -35,3 +35,36 @@ pub fn purge_all_user_tables(conn: &mut SqliteConnection) -> Result<(), AppError
         .map_err(AppError::from)?;
     Ok(())
 }
+
+/// Delete one knowledge base and all nested rows (messages → conversations → chunks → documents → kb).
+pub fn purge_knowledge_base(conn: &mut SqliteConnection, kb_id: &str) -> Result<(), AppError> {
+    let kb_id = kb_id.to_string();
+    conn
+        .transaction(|conn| -> Result<(), diesel::result::Error> {
+            let conv_ids: Vec<String> = conversations::table
+                .filter(conversations::knowledge_base_id.eq(&kb_id))
+                .select(conversations::id)
+                .load(conn)?;
+            if !conv_ids.is_empty() {
+                diesel::delete(messages::table.filter(messages::conversation_id.eq_any(&conv_ids)))
+                    .execute(conn)?;
+            }
+            diesel::delete(conversations::table.filter(conversations::knowledge_base_id.eq(&kb_id)))
+                .execute(conn)?;
+            diesel::delete(chunks::table.filter(chunks::knowledge_base_id.eq(&kb_id))).execute(conn)?;
+            diesel::delete(documents::table.filter(documents::knowledge_base_id.eq(&kb_id)))
+                .execute(conn)?;
+            let n = diesel::delete(knowledge_bases::table.find(&kb_id)).execute(conn)?;
+            if n == 0 {
+                return Err(diesel::result::Error::NotFound);
+            }
+            Ok(())
+        })
+        .map_err(|e| match e {
+            diesel::result::Error::NotFound => {
+                AppError::not_found(format!("Knowledge base {kb_id} not found"))
+            }
+            other => AppError::from(other),
+        })?;
+    Ok(())
+}
