@@ -157,3 +157,65 @@ export function groupChunksByHeading(chunks: Chunk[]): Array<{ heading: string; 
   }
   return groups;
 }
+
+export const SOURCE_PREVIEW_CONTEXT_CHARS = 3000;
+
+export type TextRange = { start: number; end: number };
+
+export type ContextWindow = {
+  windowStart: number;
+  windowEnd: number;
+  text: string;
+  highlight: TextRange | null;
+  hasPrefix: boolean;
+  hasSuffix: boolean;
+};
+
+function snapStartToNewline(text: string, index: number): number {
+  if (index <= 0) return 0;
+  const nl = text.lastIndexOf('\n', index);
+  if (nl >= 0 && nl >= index - 80) return nl + 1;
+  return index;
+}
+
+function snapEndToNewline(text: string, index: number): number {
+  if (index >= text.length) return text.length;
+  const nl = text.indexOf('\n', index);
+  if (nl >= 0 && nl <= index + 80) return nl;
+  return index;
+}
+
+export function sliceContextWindow(
+  fullText: string,
+  range: TextRange | null,
+  contextChars: number = SOURCE_PREVIEW_CONTEXT_CHARS,
+): ContextWindow {
+  if (!fullText || !range) {
+    return {
+      windowStart: 0,
+      windowEnd: 0,
+      text: '',
+      highlight: null,
+      hasPrefix: false,
+      hasSuffix: false,
+    };
+  }
+
+  const start = Math.max(0, Math.min(range.start, fullText.length));
+  const end = Math.max(start, Math.min(range.end, fullText.length));
+
+  let windowStart = Math.max(0, start - contextChars);
+  let windowEnd = Math.min(fullText.length, end + contextChars);
+  windowStart = snapStartToNewline(fullText, windowStart);
+  windowEnd = snapEndToNewline(fullText, windowEnd);
+
+  const text = fullText.slice(windowStart, windowEnd);
+  return {
+    windowStart,
+    windowEnd,
+    text,
+    highlight: { start: start - windowStart, end: end - windowStart },
+    hasPrefix: windowStart > 0,
+    hasSuffix: windowEnd < fullText.length,
+  };
+}
