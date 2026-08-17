@@ -1,29 +1,46 @@
 import { Separator } from 'react-resizable-panels';
 
-/** Between chat column and search results (drag horizontally). */
-export function ColumnSplitterHandle() {
+const handleBase =
+  'relative flex shrink-0 select-none items-center justify-center outline-none ' +
+  'focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1 ' +
+  'data-[separator=active]:bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)]';
+
+/** Horizontal drag handle between columns. */
+export function ColumnSplitterHandle({
+  id,
+  label = '拖动调整宽度',
+}: {
+  id: string;
+  label?: string;
+}) {
   return (
     <Separator
-      id="kb-split-main-results"
-      title="拖动调整宽度"
-      className="relative mx-0.5 flex w-2 shrink-0 select-none items-center justify-center rounded outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1"
-      aria-label="调整对话区与检索结果宽度"
+      id={id}
+      title={label}
+      aria-label={label}
+      className={`${handleBase} w-1.5 cursor-col-resize hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]`}
     >
-      <span className="splitter-inner pointer-events-none h-[min(100%-16px,720px)] w-px rounded-full bg-[var(--color-border)] transition-colors" />
+      <span className="pointer-events-none h-full w-px bg-[var(--color-border)]" />
     </Separator>
   );
 }
 
-/** Between message list and composer (drag vertically). */
-export function RowSplitterHandle() {
+/** Vertical drag handle between rows. */
+export function RowSplitterHandle({
+  id,
+  label = '拖动调整高度',
+}: {
+  id: string;
+  label?: string;
+}) {
   return (
     <Separator
-      id="kb-split-messages-input"
-      title="拖动调整高度"
-      className="relative my-0.5 flex h-2 shrink-0 select-none items-center justify-center rounded outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-1"
-      aria-label="调整消息区与输入区高度"
+      id={id}
+      title={label}
+      aria-label={label}
+      className={`${handleBase} h-1.5 cursor-row-resize hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]`}
     >
-      <span className="splitter-inner pointer-events-none h-px w-[min(100%-24px,920px)] rounded-full bg-[var(--color-border)] transition-colors" />
+      <span className="pointer-events-none h-px w-full bg-[var(--color-border)]" />
     </Separator>
   );
 }

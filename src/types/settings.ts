@@ -22,7 +22,7 @@ export interface AppSettings {
   keyword_weight: number;
   max_results: number;
   data_directory: string;
-  /** 主题主色（按钮等），如 #6366f1 */
+  /** 主题主色（按钮等），如 #0f766e */
   accent_color: string;
   /** 配色方案：跟随系统 / 浅色 / 深色 */
   color_scheme: ColorSchemePreference;
@@ -50,7 +50,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   keyword_weight: 0.3,
   max_results: 6,
   data_directory: '',
-  accent_color: '#6366f1',
+  accent_color: '#0f766e',
   color_scheme: 'system',
   answer_self_check: true,
   default_chunking_strategy: { ...FALLBACK_CHUNKING_STRATEGY },

@@ -12,7 +12,7 @@ export function EmbeddingProgress({ progress }: EmbeddingProgressProps) {
     <div className="space-y-2 pt-1">
       <div className="flex justify-between text-xs text-[var(--color-text-secondary)] gap-2">
         <span>
-          向量化 {progress.completed}/{progress.total}
+          向量化 {progress.completed}/{progress.total}（处理中请勿关闭窗口）
         </span>
         {progress.failedChunks > 0 ? (
           <span className="text-amber-600 shrink-0">失败分块 {progress.failedChunks}</span>

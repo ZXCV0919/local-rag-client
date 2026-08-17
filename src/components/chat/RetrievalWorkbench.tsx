@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { Group, Panel } from 'react-resizable-panels';
 import { KbChatWorkbenchProvider } from '../../context/KbChatWorkbenchContext';
+import { useSourcesPanelContext } from '../../context/SourcesPanelContext';
 import { tauriCommand } from '../../hooks/useDatabase';
 import { retrieve, type RetrievalResult } from '../../services/retrieval';
 import type { KnowledgeBase, KnowledgeBaseRow } from '../../types/knowledge-base';
 import { knowledgeBaseFromRow } from '../../types/knowledge-base';
 import { DEFAULT_SETTINGS, type ChatProvider, type RetrievalMode } from '../../types/settings';
+import { ColumnSplitterHandle } from '../common/PanelSplitterHandles';
+import { SourcesPanel } from '../sources/SourcesPanel';
 import { ModeSelector } from './ModeSelector';
 import { SearchResultsPanel } from './SearchResultsPanel';
 
@@ -66,6 +70,7 @@ export function RetrievalWorkbench({
   const [error, setError] = useState<string | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { open: sourcesOpen, toggle: toggleSources } = useSourcesPanelContext();
 
   useEffect(() => {
     let cancelled = false;
@@ -178,90 +183,158 @@ export function RetrievalWorkbench({
     ],
   );
 
+  const iconBtn =
+    'inline-flex h-8 w-8 items-center justify-center rounded-[length:var(--radius-control)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]';
+
+  const chromeButtons = (
+    <>
+      <button
+        type="button"
+        onClick={toggleSources}
+        title={sourcesOpen ? '关闭资料面板' : '打开资料面板'}
+        aria-label={sourcesOpen ? '关闭资料面板' : '打开资料面板'}
+        aria-pressed={sourcesOpen}
+        className={`${iconBtn} ${
+          sourcesOpen
+            ? 'bg-[var(--color-bg-active)] text-[var(--color-text-primary)]'
+            : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)]'
+        }`}
+      >
+        <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.25" aria-hidden>
+          <rect x="1.5" y="2.5" width="13" height="11" rx="1" />
+          <path d="M11 2.5v11" strokeLinecap="square" />
+        </svg>
+      </button>
+      <Link
+        to={`/kb/${kbId}/documents`}
+        title="文档管理"
+        aria-label="文档管理"
+        className={`${iconBtn} text-[var(--color-text-secondary)] hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)]`}
+      >
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </Link>
+      <button
+        type="button"
+        onClick={() => setDrawerOpen((v) => !v)}
+        title={drawerOpen ? '关闭排查' : '排查检索'}
+        aria-label={drawerOpen ? '关闭排查' : '排查检索'}
+        aria-pressed={drawerOpen}
+        className={`${iconBtn} ${
+          drawerOpen
+            ? 'bg-[var(--color-bg-active)] text-[var(--color-text-primary)]'
+            : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)]'
+        }`}
+      >
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20 20l-3.5-3.5" strokeLinecap="round" />
+        </svg>
+      </button>
+    </>
+  );
+
   return (
     <KbChatWorkbenchProvider value={workbench}>
-      <div className="relative flex min-h-0 flex-1 flex-col">
-        <div className="pointer-events-none absolute right-3 top-2 z-10 flex items-center gap-1">
-          <Link
-            to={`/kb/${kbId}/documents`}
-            title="文档"
-            aria-label="文档"
-            className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-[length:var(--radius-control)] text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+        {/* 资料面板关闭时：按钮浮在对话区右上，不占整行 */}
+        {!sourcesOpen ? (
+          <div className="pointer-events-none absolute right-2 top-2 z-10 flex items-center gap-0.5">
+            <div className="pointer-events-auto flex items-center gap-0.5 rounded-[length:var(--radius-control)] bg-[color-mix(in_srgb,var(--color-surface)_92%,transparent)] p-0.5 shadow-[var(--shadow-sm)] ring-1 ring-[var(--color-border)]">
+              {chromeButtons}
+            </div>
+          </div>
+        ) : null}
+
+        <div className="flex min-h-0 flex-1 overflow-hidden">
+          <Group
+            orientation="horizontal"
+            className="flex h-full min-h-0 w-full overflow-hidden"
+            key={`${drawerOpen ? 'r' : ''}${sourcesOpen ? 's' : ''}`}
           >
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-          <button
-            type="button"
-            onClick={() => setDrawerOpen((v) => !v)}
-            title={drawerOpen ? '关闭排查' : '排查检索'}
-            aria-label={drawerOpen ? '关闭排查' : '排查检索'}
-            aria-pressed={drawerOpen}
-            className={`pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-[length:var(--radius-control)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
-              drawerOpen
-                ? 'bg-[var(--color-bg-active)] text-[var(--color-text-primary)]'
-                : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-              <circle cx="11" cy="11" r="7" />
-              <path d="M20 20l-3.5-3.5" strokeLinecap="round" />
-            </svg>
-          </button>
-        </div>
-        <div className="flex min-h-0 flex-1">
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
-          {drawerOpen ? (
-            <aside className="flex min-h-0 w-[min(360px,38%)] shrink-0 flex-col overflow-hidden border-l border-[var(--color-border)] bg-[var(--color-surface)]">
-              <div className="flex shrink-0 flex-col gap-2 border-b border-[var(--color-border)] p-3">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs font-medium text-[var(--color-text-secondary)]">排查检索</p>
-                  <button
-                    type="button"
-                    onClick={() => setDrawerOpen(false)}
-                    className="rounded-[length:var(--radius-control)] px-2 py-1 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-                  >
-                    关闭
-                  </button>
-                </div>
-                <ModeSelector value={mode} onChange={setMode} />
-                <input
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') void runSearch();
-                  }}
-                  placeholder="排查检索：先看命中片段…"
-                  title="检索工作台：先看检索命中，再决定要不要问模型"
-                  disabled={!kb}
-                  className="w-full rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
-                />
-                <button
-                  type="button"
-                  onClick={() => void runSearch()}
-                  disabled={!kb || loading || !query.trim()}
-                  title="先看检索命中，再决定要不要问模型"
-                  className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2 text-sm text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
-                >
-                  {loading ? '检索中…' : '排查检索'}
-                </button>
-              </div>
-              <div className="min-h-0 flex-1 overflow-hidden">
-                <SearchResultsPanel
-                  className="h-full min-h-0 overflow-hidden"
-                  chunks={result?.chunks ?? []}
-                  loading={loading}
-                  error={error}
-                  modeLabel={modeLabel}
-                  hasSearched={searchAttempted}
-                  totalCandidates={result?.totalCandidates ?? -1}
-                />
-              </div>
-            </aside>
-          ) : null}
+            <Panel
+              id="chat"
+              minSize="30%"
+              defaultSize={drawerOpen || sourcesOpen ? '48%' : '100%'}
+              className="min-h-0 min-w-0"
+            >
+              <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden">{children}</div>
+            </Panel>
+
+            {drawerOpen ? (
+              <>
+                <ColumnSplitterHandle id="split-chat-retrieval" label="拖动调整排查面板宽度" />
+                <Panel id="retrieval" minSize="18%" defaultSize="24%" maxSize="45%" className="min-h-0 min-w-0">
+                  <aside className="flex h-full min-h-0 flex-col overflow-hidden border-l border-[var(--color-border)] bg-[var(--color-surface)]">
+                    <div className="flex shrink-0 flex-col gap-2 border-b border-[var(--color-border)] p-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs font-medium text-[var(--color-text-secondary)]">排查检索</p>
+                        <button
+                          type="button"
+                          onClick={() => setDrawerOpen(false)}
+                          className="rounded-[length:var(--radius-control)] px-2 py-1 text-xs text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-btn-ghost-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                        >
+                          关闭
+                        </button>
+                      </div>
+                      <ModeSelector value={mode} onChange={setMode} />
+                      <input
+                        type="search"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') void runSearch();
+                        }}
+                        placeholder="排查检索：先看命中片段…"
+                        title="检索工作台：先看检索命中，再决定要不要问模型"
+                        disabled={!kb}
+                        className="w-full rounded-[length:var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => void runSearch()}
+                        disabled={!kb || loading || !query.trim()}
+                        title="先看检索命中，再决定要不要问模型"
+                        className="rounded-[length:var(--radius-control)] bg-[var(--color-accent)] px-4 py-2 text-sm text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:opacity-50"
+                      >
+                        {loading ? '检索中…' : '排查检索'}
+                      </button>
+                    </div>
+                    <div className="min-h-0 flex-1 overflow-hidden">
+                      <SearchResultsPanel
+                        className="h-full min-h-0 overflow-hidden"
+                        chunks={result?.chunks ?? []}
+                        loading={loading}
+                        error={error}
+                        modeLabel={modeLabel}
+                        hasSearched={searchAttempted}
+                        totalCandidates={result?.totalCandidates ?? -1}
+                      />
+                    </div>
+                  </aside>
+                </Panel>
+              </>
+            ) : null}
+
+            {sourcesOpen ? (
+              <>
+                <ColumnSplitterHandle id="split-chat-sources" label="拖动调整资料面板宽度" />
+                <Panel id="sources" minSize="24%" defaultSize="40%" maxSize="55%" className="min-h-0 min-w-0">
+                  {/* 工具栏仅占文档区宽度，随面板拖动缩放 */}
+                  <aside className="flex h-full min-h-0 flex-col overflow-hidden border-l border-[var(--color-border)] bg-[var(--color-surface)]">
+                    <div className="flex h-10 shrink-0 items-center justify-end gap-0.5 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-2">
+                      {chromeButtons}
+                    </div>
+                    <div className="min-h-0 flex-1 overflow-hidden">
+                      <SourcesPanel />
+                    </div>
+                  </aside>
+                </Panel>
+              </>
+            ) : null}
+          </Group>
         </div>
       </div>
     </KbChatWorkbenchProvider>

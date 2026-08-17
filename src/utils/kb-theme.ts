@@ -10,12 +10,12 @@ export interface KbTheme {
 }
 
 export const KB_THEMES: KbTheme[] = [
-  { strip: '#6366f1', avatarBg: '#eef2ff', avatarFg: '#4f46e5', iconBg: '#4f6ef7', iconFg: '#ffffff', kind: 'doc' },
-  { strip: '#10b981', avatarBg: '#ecfdf5', avatarFg: '#059669', iconBg: '#059669', iconFg: '#ffffff', kind: 'code' },
-  { strip: '#8b5cf6', avatarBg: '#f5f3ff', avatarFg: '#7c3aed', iconBg: '#7c3aed', iconFg: '#ffffff', kind: 'api' },
-  { strip: '#f59e0b', avatarBg: '#fffbeb', avatarFg: '#d97706', iconBg: '#d97706', iconFg: '#ffffff', kind: 'folder' },
-  { strip: '#14b8a6', avatarBg: '#f0fdfa', avatarFg: '#0d9488', iconBg: '#0d9488', iconFg: '#ffffff', kind: 'chat' },
-  { strip: '#f97316', avatarBg: '#fff7ed', avatarFg: '#ea580c', iconBg: '#ea580c', iconFg: '#ffffff', kind: 'faq' },
+  { strip: '#0f766e', avatarBg: '#ccfbf1', avatarFg: '#0f766e', iconBg: '#0f766e', iconFg: '#ffffff', kind: 'doc' },
+  { strip: '#475569', avatarBg: '#f1f5f9', avatarFg: '#334155', iconBg: '#475569', iconFg: '#ffffff', kind: 'code' },
+  { strip: '#d97706', avatarBg: '#fffbeb', avatarFg: '#b45309', iconBg: '#d97706', iconFg: '#ffffff', kind: 'folder' },
+  { strip: '#0d9488', avatarBg: '#f0fdfa', avatarFg: '#0f766e', iconBg: '#0d9488', iconFg: '#ffffff', kind: 'chat' },
+  { strip: '#059669', avatarBg: '#ecfdf5', avatarFg: '#047857', iconBg: '#059669', iconFg: '#ffffff', kind: 'api' },
+  { strip: '#ea580c', avatarBg: '#fff7ed', avatarFg: '#c2410c', iconBg: '#ea580c', iconFg: '#ffffff', kind: 'faq' },
 ];
 
 export function kbThemeForId(id: string): KbTheme {

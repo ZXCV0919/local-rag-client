@@ -4,30 +4,32 @@ import type { ChunkResult } from '../chunker/types';
 import type { ParserResult } from '../parser/types';
 import { parseDocument } from '../parser';
 import { chunkDocument, chunkerConfigFromStrategy } from '../chunker';
-import type { ParseChunkRequest, ParseChunkResponse } from './parse-chunk.worker';
+import type { ParseChunkRequest, ParseChunkResponse } from './parse-chunk-types';
 import ParseChunkWorker from './parse-chunk.worker?worker';
 
 export type ParseChunkProgressStep = 'parsing' | 'chunking';
 
-/**
- * Parse + chunk off the UI thread for md/txt/docx.
- * PDF stays on the main thread (pdf.js already uses its own worker; nested workers are brittle).
- */
-export async function parseAndChunkDocument(
+async function parseAndChunkOnMainThread(
   buffer: ArrayBuffer,
   fileName: string,
   fileType: FileType,
   chunking: ChunkingStrategy,
   onStep?: (step: ParseChunkProgressStep) => void,
 ): Promise<{ parsed: ParserResult; chunks: ChunkResult[] }> {
-  if (fileType === 'pdf') {
-    onStep?.('parsing');
-    const parsed = await parseDocument(buffer, fileName, fileType);
-    onStep?.('chunking');
-    const chunks = chunkDocument(parsed.content, chunkerConfigFromStrategy(chunking));
-    return { parsed, chunks };
-  }
+  onStep?.('parsing');
+  const parsed = await parseDocument(buffer, fileName, fileType);
+  onStep?.('chunking');
+  const chunks = chunkDocument(parsed.content, chunkerConfigFromStrategy(chunking));
+  return { parsed, chunks };
+}
 
+function parseAndChunkInWorker(
+  buffer: ArrayBuffer,
+  fileName: string,
+  fileType: FileType,
+  chunking: ChunkingStrategy,
+  onStep?: (step: ParseChunkProgressStep) => void,
+): Promise<{ parsed: ParserResult; chunks: ChunkResult[] }> {
   return new Promise((resolve, reject) => {
     const worker = new ParseChunkWorker();
     const requestId = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -72,4 +74,28 @@ export async function parseAndChunkDocument(
     };
     worker.postMessage(msg, [copy]);
   });
+}
+
+/**
+ * md/txt → Worker（失败则回退主线程）；pdf/docx → 主线程。
+ */
+export async function parseAndChunkDocument(
+  buffer: ArrayBuffer,
+  fileName: string,
+  fileType: FileType,
+  chunking: ChunkingStrategy,
+  onStep?: (step: ParseChunkProgressStep) => void,
+): Promise<{ parsed: ParserResult; chunks: ChunkResult[] }> {
+  if (fileType === 'pdf' || fileType === 'docx') {
+    return parseAndChunkOnMainThread(buffer, fileName, fileType, chunking, onStep);
+  }
+
+  try {
+    return await parseAndChunkInWorker(buffer, fileName, fileType, chunking, onStep);
+  } catch (err) {
+    console.warn('Parse worker failed, falling back to main thread:', err);
+    // Worker may have transferred/neutered the buffer — copy again from a fresh slice if needed.
+    // Caller still holds original `buffer`; use it for fallback.
+    return parseAndChunkOnMainThread(buffer, fileName, fileType, chunking, onStep);
+  }
 }

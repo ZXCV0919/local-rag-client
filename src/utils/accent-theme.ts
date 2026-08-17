@@ -81,7 +81,7 @@ export function pickOnAccentColor(normalRgb: [number, number, number], hoverRgb:
 
 /** 将主题色写入 :root，并同步 `--color-accent-hover`、`--color-on-accent`。 */
 export function applyAccentVariables(root: HTMLElement, accentHex: string): void {
-  const normalized = normalizeHex(accentHex) ?? '#6366f1';
+  const normalized = normalizeHex(accentHex) ?? '#0f766e';
   const rgb = parseHexRgb(normalized);
   if (!rgb) return;
 
@@ -99,16 +99,15 @@ export function applyAccentVariables(root: HTMLElement, accentHex: string): void
 }
 
 export const ACCENT_PRESETS: { label: string; hex: string }[] = [
+  { label: '墨青', hex: '#0f766e' },
+  { label: '石板', hex: '#475569' },
+  { label: '琥珀', hex: '#d97706' },
+  { label: '翠绿', hex: '#059669' },
+  { label: '电青', hex: '#06b6d4' },
+  { label: '蓝', hex: '#2563eb' },
   { label: '靛紫', hex: '#6366f1' },
   { label: '紫罗兰', hex: '#7c3aed' },
-  { label: '雾紫', hex: '#a855f7' },
-  { label: '蓝', hex: '#2563eb' },
-  { label: '电青', hex: '#06b6d4' },
-  { label: '青', hex: '#0d9488' },
-  { label: '翠绿', hex: '#059669' },
   { label: '珊瑚', hex: '#fb7185' },
   { label: '桃粉', hex: '#f472b6' },
-  { label: '琥珀', hex: '#d97706' },
   { label: '玫红', hex: '#e11d48' },
-  { label: '石板', hex: '#475569' },
 ];

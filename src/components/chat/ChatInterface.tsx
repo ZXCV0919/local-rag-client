@@ -638,9 +638,9 @@ export function ChatInterface() {
 
   return (
 
-    <div className="mx-auto flex h-full min-h-0 w-full max-w-[760px] flex-1 flex-col overflow-hidden px-4 pb-3 pt-2">
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)]">
-        <div className="flex w-full min-w-0 shrink-0 flex-col border-b border-[var(--color-border)] px-5 pt-4">
+    <div className="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden border-0 bg-[var(--color-bg-primary)]">
+        <div className="flex w-full min-w-0 shrink-0 flex-col border-b border-[var(--color-border)] bg-[var(--color-surface)] px-5 pt-4">
           {kb ? (
             <ChatHeader
               kbName={kb.name}
@@ -651,7 +651,7 @@ export function ChatInterface() {
           ) : null}
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-5">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[var(--color-surface)] px-5">
           <div className="flex w-full min-w-0 min-h-0 flex-1 flex-col">
             {chatError ? (
               <div className="mb-2 mt-3 shrink-0 rounded-[length:var(--radius-control)] border border-[var(--color-danger-border)] bg-[var(--badge-error-bg)] px-3 py-2 text-xs text-[var(--badge-error-fg)]">

@@ -177,7 +177,7 @@ export function KbConversationSidebar() {
   const settingsActive = location.pathname.startsWith('/settings');
 
   return (
-    <aside className="flex h-full w-[var(--sidebar-width)] min-w-[var(--sidebar-width)] flex-col overflow-hidden border-r border-[var(--color-border-sidebar)] bg-[var(--color-bg-sidebar)] text-[var(--color-text-sidebar)]">
+    <aside className="flex h-full w-full min-w-0 flex-col overflow-hidden border-r border-[var(--color-border-sidebar)] bg-[var(--color-bg-sidebar)] text-[var(--color-text-sidebar)]">
       <div className="flex items-center justify-between gap-2 border-b border-[var(--color-border-sidebar)] px-3 py-2.5">
         <span className="truncate text-[12px] font-medium tracking-tight text-[var(--color-text-sidebar)]">
           本地知识库

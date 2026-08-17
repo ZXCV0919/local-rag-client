@@ -1,6 +1,6 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { BrandMark } from '../brand/BrandMark';
-import { useSourcesPanelContext } from '../../context/SourcesPanelContext';
+import { useAppNavigate } from '../../hooks/useAppNavigate';
 
 async function safeWindowOp(fn: () => Promise<void>): Promise<void> {
   try {
@@ -15,33 +15,6 @@ async function safeWindowOp(fn: () => Promise<void>): Promise<void> {
 const titlebarBtn =
   'inline-flex h-full w-11 shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--color-text-sidebar-dim)] outline-none transition-colors duration-150 ' +
   'hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-sidebar)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]';
-
-function SourcesPanelToggle() {
-  const { open, toggle } = useSourcesPanelContext();
-
-  return (
-    <button
-      type="button"
-      data-tauri-no-drag
-      className={titlebarBtn}
-      aria-pressed={open}
-      aria-label={open ? '关闭资料面板' : '打开资料面板'}
-      onClick={toggle}
-    >
-      <svg
-        className="h-3.5 w-3.5 shrink-0"
-        viewBox="0 0 16 16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        aria-hidden
-      >
-        <rect x="1.5" y="2.5" width="13" height="11" rx="1" />
-        <path d="M11 2.5v11" strokeLinecap="square" />
-      </svg>
-    </button>
-  );
-}
 
 function WindowControls() {
   return (
@@ -89,12 +62,13 @@ function WindowControls() {
 }
 
 export function Titlebar() {
+  const navigate = useAppNavigate();
+
   return (
     <div className="relative flex h-[var(--titlebar-height)] min-h-[var(--titlebar-height)] items-stretch select-none border-b border-[var(--color-border-sidebar)] bg-[var(--color-bg-sidebar)] transition-colors duration-150">
-      {/* One continuous strip (split regions often break dragging on Windows / WebView2) */}
       <div
         data-tauri-drag-region
-        className="flex min-w-0 flex-1 cursor-default items-center overflow-hidden pl-4"
+        className="flex min-w-0 flex-1 cursor-default items-center overflow-hidden pl-2"
         aria-label="拖拽可移动窗口；双击最大化或还原"
         onDoubleClick={(e) => {
           const t = e.target as HTMLElement | null;
@@ -104,17 +78,23 @@ export function Titlebar() {
           void safeWindowOp(() => getCurrentWindow().toggleMaximize());
         }}
       >
-        <div className="pointer-events-none flex items-center gap-2.5">
+        <button
+          type="button"
+          data-tauri-no-drag
+          onClick={() => navigate('/')}
+          title="回到首页"
+          aria-label="回到首页"
+          className="flex items-center gap-2.5 rounded-[length:var(--radius-control)] px-2 py-1 transition-colors hover:bg-[var(--color-bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+        >
           <BrandMark size={22} />
-          <div className="flex flex-col leading-none">
+          <div className="flex flex-col leading-none text-left">
             <span className="text-[13px] font-semibold tracking-tight text-[var(--color-text-sidebar)]">
               本地知识库
             </span>
             <span className="mt-0.5 text-[10px] text-[var(--color-text-sidebar-dim)]">Local RAG Workbench</span>
           </div>
-        </div>
+        </button>
       </div>
-      <SourcesPanelToggle />
       <WindowControls />
     </div>
   );

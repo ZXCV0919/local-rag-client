@@ -66,7 +66,7 @@ export function SearchResultsPanel({
 
       className={`flex min-h-0 flex-col rounded-[length:var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)] ${className}`}
 
-      aria-label="检索结果"
+      aria-label="检索工作台结果"
 
     >
 
@@ -84,7 +84,7 @@ export function SearchResultsPanel({
 
         <span className="text-sm font-semibold text-[var(--color-text-primary)]">
 
-          参考来源
+          命中片段
 
           {chunks.length > 0 ? ` (${chunks.length})` : ''}
 

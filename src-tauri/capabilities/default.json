@@ -12,7 +12,15 @@
     "core:window:allow-start-dragging",
     "dialog:default",
     "fs:default",
+    "fs:allow-mkdir",
     "fs:allow-write-text-file",
+    {
+      "identifier": "fs:allow-mkdir",
+      "allow": [
+        { "path": "$HOME" },
+        { "path": "$HOME/**" }
+      ]
+    },
     {
       "identifier": "fs:allow-write-text-file",
       "allow": [
@@ -26,6 +34,36 @@
         { "path": "$DOWNLOAD/**" }
       ]
     },
-    "opener:default"
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [
+        { "path": "$HOME" },
+        { "path": "$HOME/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-read-file",
+      "allow": [
+        { "path": "$HOME" },
+        { "path": "$HOME/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-stat",
+      "allow": [
+        { "path": "$HOME" },
+        { "path": "$HOME/**" }
+      ]
+    },
+    "opener:default",
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        { "path": "$APPDATA" },
+        { "path": "$APPDATA/**" },
+        { "path": "$APPLOCALDATA" },
+        { "path": "$APPLOCALDATA/**" }
+      ]
+    }
   ]
 }
